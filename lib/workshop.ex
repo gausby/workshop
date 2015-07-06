@@ -6,8 +6,8 @@ defmodule Workshop do
     |> Enum.filter(&(File.dir?(Path.join(folder, &1))))
   end
 
-  def get_description(folder) do
-    {:ok, description} = File.read(Path.join(folder, "README.md"))
-    description
+  def info(folder) do
+    path = Path.join(folder, "manifest.exs")
+    Code.load_file(path) |> hd |> elem(0)
   end
 end

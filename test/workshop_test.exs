@@ -6,6 +6,11 @@ defmodule WorkshopTest do
   end
 
   test "get a workshop description" do
-    assert Workshop.get_description(Path.join(File.cwd!, "sample")) == "A sample workshop\n=================\n"
+    assert Workshop.info("./sample").workshop[:description] == "This workshop is a sample workshop used for developing the workshop.\n"
   end
+
+  test "get a workshop title" do
+    assert Workshop.info("./sample").workshop[:title] == "A sample workshop!"
+  end
+
 end
