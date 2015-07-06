@@ -29,7 +29,8 @@ Not implemented. Should display a hint about the current exercise. Like info, bu
 ### `check`
 Not implemented. Should run the acceptance test against the users solution for the current exercise.
 
-A system check should be performed if the option `--system` is given. It will fail the test if prerequisites, like not having software like a database installed, is not met.
+### `doctor`
+A system check should be performed. It will fail the test if prerequisites, like not having software like a database installed, is not met.
 
 ### `help`
 Not implemented. Display a link to the Github issues where the current workshop is hosted. Users could go here and ask questions if it is an online workshop.
