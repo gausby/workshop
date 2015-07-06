@@ -1,5 +1,5 @@
 defmodule MyWorkshop.Prerequisite do
   def run() do
-    {:ok, "fantastic!"}
+    {:ok, ["fantastic!"]}
   end
 end
