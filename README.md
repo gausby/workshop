@@ -13,7 +13,7 @@ Not implemented. Should setup the working directory and show the first exercise.
 Not implemented. Should list exercises in the current workshop. Potentially show which exercise is the current one.
 
 ### `next`
-Not implemented. Should proceed to the next exercise.
+Not fully implemented. Should proceed to the next exercise.
 
 Optionally it should run the acceptance test and lock if it does not pass.
 

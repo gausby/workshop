@@ -21,7 +21,9 @@ defmodule Mix.Tasks.Workshop.Next do
   end
 
   defp copy_exercise_files_to_sandbox(source, destination) do
-    Enum.each(File.ls!(source), fn item ->
+    source
+    |> File.ls!
+    |> Enum.each(fn item ->
       if File.dir? item do
         new_destination = Path.join(destination, item)
         create_directory(new_destination)
