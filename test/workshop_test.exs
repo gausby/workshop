@@ -2,7 +2,7 @@ defmodule WorkshopTest do
   use ExUnit.Case
 
   test "listing exercise folders in a workshop" do
-    assert Workshop.find_exercise_folders(Path.join(File.cwd!, "sample")) == ["exercise_1", "exercise_2"]
+    assert Workshop.find_exercise_folders(Path.join(File.cwd!, "sample")) == ["01_the_beginning", "02_the_end"]
   end
 
   test "get a workshop description" do

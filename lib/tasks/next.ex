@@ -17,7 +17,7 @@ defmodule Mix.Tasks.Workshop.Next do
   end
 
   defp find_next_exercise do
-    "exercise_1"
+    "01_the_beginning"
   end
 
   defp copy_exercise_files_to_sandbox(source, destination) do

@@ -2,7 +2,7 @@ defmodule Workshop do
   def find_exercise_folders(folder) do
     folder
     |> File.ls!
-    |> Enum.filter(&(String.starts_with? &1, "exercise"))
+    |> Enum.filter(&(String.match?(&1, ~r/^\d/)))
     |> Enum.filter(&(File.dir?(Path.join(folder, &1))))
   end
 
