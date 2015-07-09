@@ -36,7 +36,7 @@ A system check should be performed. It will fail the test if prerequisites, like
 Not implemented. Display a link to the Github issues where the current workshop is hosted. Users could go here and ask questions if it is an online workshop.
 
 ### `new`
-Not implemented. Create a new workshop from a template.
+Create a new workshop from a template.
 
 
 Checking dependencies for the workshop
