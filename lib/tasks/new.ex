@@ -51,6 +51,7 @@ defmodule Mix.Tasks.Workshop.New do
     create_file ".workshop/prerequisite.exs", prerequisite_template(assigns)
     create_file ".workshop/workshop.exs", workshop_template(assigns)
     create_directory ".workshop/exercises"
+    create_file ".workshop/exercises/.gitkeep", ""
   end
 
   defp snake_case_to_headline(name) do
