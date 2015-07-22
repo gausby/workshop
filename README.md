@@ -35,9 +35,11 @@ A system check should be performed. It will fail the test if prerequisites, like
 ### `help`
 Not implemented. Display a link to the Github issues where the current workshop is hosted. Users could go here and ask questions if it is an online workshop.
 
-### `new`
+### `new.workshop`
 Create a new workshop from a template.
 
+### `new.exercise`
+Create and add a new exercise from a template to the current workshop.
 
 Checking dependencies for the workshop
 --------------------------------------
