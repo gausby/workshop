@@ -53,19 +53,10 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
   end
 
   # workshops should get prefixed with a weight
-  defp get_exercises_by_weight do
-    File.ls!(File.cwd!)
-    |> Enum.reject(&(String.starts_with?(&1, ".")))
-    |> Enum.map(fn item ->
-                  [number, name] = String.split(item, "_", parts: 2)
-                  {String.to_integer(number), name}
-               end)
-    |> Enum.sort
-  end
 
   # calculate the next weight value for the next exercise
   defp get_next_exercise_weight do
-    case Enum.reverse(get_exercises_by_weight) do
+    case Enum.reverse(Workshop.get_exercises_by_weight!) do
       [{weight, _} | _] ->
         weight + 10 |> Integer.to_string |> String.rjust(3, ?0)
 
