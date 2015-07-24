@@ -6,7 +6,7 @@ defmodule Mix.Tasks.Workshop.Exercises do
   def run(argv) do
     {opts, _, _} = OptionParser.parse(argv, switches: [enabled: :boolean])
     path = "sandbox/.workshop/"
-    Workshop.info(path)
+    Code.require_file(Path.join(path, "workshop.exs"))
     metadata = Workshop.Meta.info
     exercises_folder = Path.join(path, "exercises")
 

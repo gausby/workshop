@@ -6,13 +6,6 @@ defmodule Workshop do
     |> Enum.filter(&(File.dir?(Path.join(folder, &1))))
   end
 
-  def info(folder) do
-    Path.join(folder, "workshop.exs")
-    |> Code.require_file
-    |> hd
-    |> elem(0)
-  end
-
   @headline_char ?#
   def get_exercise_title!(exercise_folder) do
     Path.join(exercise_folder, "README.md")
