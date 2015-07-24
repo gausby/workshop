@@ -7,21 +7,20 @@ defmodule Workshop do
   end
 
   def info(folder) do
-    path = Path.join(folder, "workshop.exs")
-    Code.load_file(path) |> hd |> elem(0)
+    Path.join(folder, "workshop.exs")
+    |> Code.load_file
+    |> hd
+    |> elem(0)
   end
 
   @headline_char ?#
   def get_exercise_title!(exercise_folder) do
-    [line, line2] = Path.join(exercise_folder, "README.md")
-                    |> File.stream!
-                    |> Enum.take(2)
-    cond do
-      Regex.run(~r/[^=]/, line2 |> String.strip) == nil ->
-        String.strip(line)
-      line ->
-        line |> String.lstrip(@headline_char) |> String.lstrip
-    end
+    Path.join(exercise_folder, "README.md")
+    |> File.stream!
+    |> Enum.take(1)
+    |> hd
+    |> String.lstrip(@headline_char)
+    |> String.strip
   end
 
   # workshops should get prefixed with a weight
