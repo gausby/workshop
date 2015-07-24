@@ -6,7 +6,8 @@ defmodule Mix.Tasks.Workshop.Exercises do
   def run(argv) do
     {opts, _, _} = OptionParser.parse(argv, switches: [enabled: :boolean])
     path = "sandbox/.workshop/"
-    metadata = Workshop.info(path)
+    Workshop.info(path)
+    metadata = Workshop.Meta.info
     exercises_folder = Path.join(path, "exercises")
 
     exercises = exercises_folder
@@ -16,9 +17,8 @@ defmodule Mix.Tasks.Workshop.Exercises do
     |> Enum.with_index
     |> Enum.map(fn {item, index} -> "#{(index + 1)}. #{item}\n" end)
 
-    Docs.print_heading metadata.info[:title], opts
+    Docs.print_heading metadata[:title], opts
     Docs.print "#{exercises}", opts
-
     :ok
   end
 

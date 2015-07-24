@@ -8,7 +8,7 @@ defmodule Workshop do
 
   def info(folder) do
     Path.join(folder, "workshop.exs")
-    |> Code.load_file
+    |> Code.require_file
     |> hd
     |> elem(0)
   end

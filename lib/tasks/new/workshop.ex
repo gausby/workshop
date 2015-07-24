@@ -24,7 +24,7 @@ defmodule Mix.Tasks.Workshop.New.Workshop do
       [path|_] ->
         name = Path.basename(Path.expand(path))
         check_workshop_name!(name)
-        mod = camelize(name)
+        mod = "Workshop"
         title = snake_case_to_headline(name)
         case File.mkdir_p(path) do
           :ok ->
@@ -73,7 +73,7 @@ defmodule Mix.Tasks.Workshop.New.Workshop do
   """
 
   embed_template :workshop, """
-  defmodule <%= @module %> do
+  defmodule <%= @module %>.Meta do
     def info do
       [title: "<%= @title %>",
       version: "0.0.1",
