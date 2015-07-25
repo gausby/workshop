@@ -42,6 +42,14 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
           :ok ->
             File.cd!(exercise_folder, fn ->
               do_generate_exercise(path, title, mod, opts)
+              Mix.shell.info """
+              The new exercise has been created in:
+
+                  #{exercise_folder}
+
+              If you want to change the precedence of this exercise you can simply
+              move the folder and change the assigned number.
+              """
             end)
         end
     end
@@ -52,17 +60,17 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
     Path.expand("sandbox")
   end
 
-  # workshops should get prefixed with a weight
-
   # calculate the next weight value for the next exercise
+  @weight_increment 10
   defp get_next_exercise_weight do
-    case Enum.reverse(Workshop.get_exercises_by_weight!) do
+    current = case Enum.reverse(Workshop.get_exercises_by_weight!) do
       [{weight, _} | _] ->
-        weight + 10 |> Integer.to_string |> String.rjust(3, ?0)
+        weight
 
       [] ->
-        "010"
+        0
     end
+    current + @weight_increment |> Integer.to_string |> String.rjust(3, ?0)
   end
 
   defp check_workshop_name!(name) do
