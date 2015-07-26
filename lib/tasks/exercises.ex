@@ -5,7 +5,10 @@ defmodule Mix.Tasks.Workshop.Exercises do
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do
     {opts, _, _} = OptionParser.parse(argv, switches: [enabled: :boolean])
-    path = "sandbox/.workshop/"
+
+    File.cd!("sandbox") # for dev
+    {:ok, path} = Workshop.find_workshop_data_folder
+
     Code.require_file(Path.join(path, "workshop.exs"))
     metadata = Workshop.Meta.info
     exercises_folder = Path.join(path, "exercises")

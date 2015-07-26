@@ -20,12 +20,9 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
   def run(argv) do
     {opts, argv, _} = OptionParser.parse(argv, switches: [])
 
-    # current working dir should be `.workshop` and it should have an `exercises`-folder
-    path = find_workshop_root_dir(File.cwd!)
-           |> Path.join(".workshop")
-           |> Path.join("exercises")
-    unless File.exists?(path),
-      do: Mix.raise "This command should be executed within a workshop folder"
+    File.cd("sandbox") # for development
+    {:ok, data_folder} = Workshop.find_workshop_data_folder
+    path = Path.join(data_folder, "exercises")
     # update current working dir
     File.cd!(path)
 
@@ -53,11 +50,6 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
             end)
         end
     end
-  end
-
-  # todo, should traverse the file structure until it find the root of the workshop
-  defp find_workshop_root_dir(_path) do
-    Path.expand("sandbox")
   end
 
   # calculate the next weight value for the next exercise
@@ -90,7 +82,7 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
 
   defp do_generate_exercise(name, title, mod, opts) do
     assigns = [name: name, title: title, module: mod]
-    IO.inspect {assigns, opts}
+
     create_file "README.md", readme_template(assigns)
     create_directory "files"
     create_directory "test"

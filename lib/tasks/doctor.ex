@@ -17,6 +17,7 @@ defmodule Mix.Tasks.Workshop.Doctor do
 
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do
+    File.cd! "sandbox" # for dev purposes
     {_, _, _} = OptionParser.parse(argv, switches: [system: :boolean])
 
     # find workshop root
@@ -32,6 +33,7 @@ defmodule Mix.Tasks.Workshop.Doctor do
   end
 
   defp find_workshop_root do
-    "sandbox/.workshop/"
+    {:ok, data_folder} = Workshop.find_workshop_data_folder
+    data_folder
   end
 end

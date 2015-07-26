@@ -4,7 +4,10 @@ defmodule Mix.Tasks.Workshop.Info do
 
   def run(argv) do
     {opts, _, _} = OptionParser.parse(argv, switches: [enabled: :boolean])
-    path = "./sandbox/.workshop"
+
+    File.cd!("sandbox") # for dev
+    {:ok, path} = Workshop.find_workshop_data_folder
+
     Code.require_file(Path.join(path, "workshop.exs"))
     metadata = Workshop.Meta.info()
     Docs.print_heading metadata[:title], opts
