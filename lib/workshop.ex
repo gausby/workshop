@@ -1,4 +1,42 @@
 defmodule Workshop do
+
+  @doc """
+  Find the workshop data folder for the current workshop
+  """
+  def find_workshop_data_folder, do: find_workshop_data_folder(File.cwd!)
+
+  @doc """
+  Find the data folder of the workshop starting from *folder*
+  """
+  def find_workshop_data_folder(folder) do
+    candidate = Path.join(folder, ".workshop")
+    if File.exists?(candidate) and File.exists?(Path.join(candidate, "exercises")) do
+      {:ok, candidate}
+    else
+      parent = Path.dirname(folder)
+      unless folder == parent do
+        find_workshop_data_folder parent
+      else
+        {:error, "Folder is not within a workshop"}
+      end
+    end
+  end
+
+  @doc """
+  find the root of the workshop
+  """
+  def find_workshop_folder, do: find_workshop_folder(File.cwd!)
+
+  @doc """
+  Find the root folder of the workshop starting from *folder*
+  """
+  def find_workshop_folder(folder) do
+    case find_workshop_data_folder(folder) do
+      {:ok, data_folder} -> {:ok, Path.dirname data_folder}
+      error -> error
+    end
+  end
+
   def find_exercise_folders!(folder) do
     folder
     |> File.ls!
