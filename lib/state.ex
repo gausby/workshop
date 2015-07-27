@@ -40,7 +40,8 @@ defmodule Workshop.State do
   Read and parse the state from disk.
   """
   def import_state do
-    state_file = Path.expand("state.exs")
+    {:ok, data_folder} = Workshop.find_workshop_data_folder
+    state_file = Path.join(data_folder, "state.exs")
     if File.exists? state_file do
       {state, _binding} = Code.eval_file(state_file)
       state
