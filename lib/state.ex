@@ -28,10 +28,12 @@ defmodule Workshop.State do
   """
   defmacro persist do
     quote do
+      {:ok, data_folder} = Workshop.Utils.find_workshop_data_folder
+      state_file = Path.join(data_folder, "state.exs")
       state = Workshop.State.Agent.get(var!(state_agent, Workshop.State))
               |> Macro.to_string
 
-      Path.expand("state.exs")
+      Path.join(data_folder, "state.exs")
       |> File.write(state)
     end
   end
@@ -40,7 +42,7 @@ defmodule Workshop.State do
   Read and parse the state from disk.
   """
   def import_state do
-    {:ok, data_folder} = Workshop.find_workshop_data_folder
+    {:ok, data_folder} = Workshop.Utils.find_workshop_data_folder
     state_file = Path.join(data_folder, "state.exs")
     if File.exists? state_file do
       {state, _binding} = Code.eval_file(state_file)

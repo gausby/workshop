@@ -2,6 +2,7 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
   use Mix.Task
   import Mix.Generator
   import Mix.Utils, only: [camelize: 1]
+  import Workshop.Utils, only: [find_workshop_data_folder: 0, get_exercises_by_weight!: 0]
 
   @shortdoc "Create a new exercise for a workshop"
   @moduledoc """
@@ -21,7 +22,7 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
     {opts, argv, _} = OptionParser.parse(argv, switches: [])
 
     File.cd("sandbox") # for development
-    {:ok, data_folder} = Workshop.find_workshop_data_folder
+    {:ok, data_folder} = find_workshop_data_folder
     path = Path.join(data_folder, "exercises")
     # update current working dir
     File.cd!(path)
@@ -55,7 +56,7 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
   # calculate the next weight value for the next exercise
   @weight_increment 10
   defp get_next_exercise_weight do
-    current = case Enum.reverse(Workshop.get_exercises_by_weight!) do
+    current = case Enum.reverse(get_exercises_by_weight!) do
       [{weight, _} | _] ->
         weight
 
@@ -84,6 +85,7 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
     assigns = [name: name, title: title, module: mod]
 
     create_file "README.md", readme_template(assigns)
+    create_file "exercise.exs", exercise_template(assigns)
     create_directory "files"
     create_directory "test"
     create_file "test/test_helper.exs", ""
@@ -102,5 +104,11 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
 
   If you are confused you could try `mix workshop.hint`. Otherwise ask your
   instructor or follow the directions on `mix workshop.help`.
+  """
+
+  embed_template :exercise, """
+  defmodule Workshop.Exercise.<%= @module %> do
+    @title "<%= @title %>"
+  end
   """
 end

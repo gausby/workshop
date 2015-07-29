@@ -1,5 +1,6 @@
 defmodule Mix.Tasks.Workshop.Doctor do
   use Mix.Task
+  import Workshop.Utils, only: [find_workshop_data_folder: 0]
 
   @prerequisite_file_name "prerequisite.exs"
   defp prerequisite_file(folder),
@@ -20,20 +21,15 @@ defmodule Mix.Tasks.Workshop.Doctor do
     File.cd! "sandbox" # for dev purposes
     {_, _, _} = OptionParser.parse(argv, switches: [system: :boolean])
 
-    # find workshop root
-    result = find_workshop_root
-    |> prerequisite_file
-    |> execute_prerequisite_check
+    {:ok, data_folder} = find_workshop_data_folder
+    result = data_folder
+             |> prerequisite_file
+             |> execute_prerequisite_check
 
     System.at_exit fn _ ->
       if result != :ok do
         exit({:shutdown, 1})
       end
     end
-  end
-
-  defp find_workshop_root do
-    {:ok, data_folder} = Workshop.find_workshop_data_folder
-    data_folder
   end
 end
