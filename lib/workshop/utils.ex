@@ -23,6 +23,14 @@ defmodule Workshop.Utils do
   end
 
   @doc """
+  Find the workshop data folder or fail with an exception
+  """
+  def find_workshop_data_folder! do
+    {:ok, path} = find_workshop_data_folder
+    path
+  end
+
+  @doc """
   find the root of the workshop
   """
   def find_workshop_folder, do: find_workshop_folder(File.cwd!)
