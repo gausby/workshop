@@ -1,49 +1,21 @@
 defmodule Workshop.State do
+  import Workshop.Utils, only: [find_workshop_data_folder!: 0]
+
+  @moduledoc false
+  @name __MODULE__
+
   @doc false
-  defmacro __using__(_) do
-    quote do
-      import Workshop.State, only: [state: 2, state: 3, persist: 0]
-      {:ok, agent} = Workshop.State.Agent.start_link
-      var!(state_agent, Workshop.State) = agent
-    end
-  end
-
-  defmacro state(state, opts) do
-    quote do
-      Workshop.State.Agent.update var!(state_agent, Workshop.State),
-        [{unquote(state), unquote(opts)}]
-    end
-  end
-
-  defmacro state(state, key, opts) do
-    quote do
-      Workshop.State.Agent.update var!(state_agent, Workshop.State),
-        [{unquote(state), [{unquote(key), unquote(opts)}]}]
-    end
+  def start_link() do
+    Agent.start_link(__MODULE__, :init, [], [name: @name])
   end
 
   @doc """
-  Persist the current state to disk. This has to be called when the state
-  should be committed.
+  Initialize the state agent with data from `.workshop/state.exs`, or an
+  empty keyword list if that file does not exist.
   """
-  defmacro persist do
-    quote do
-      {:ok, data_folder} = Workshop.Utils.find_workshop_data_folder
-      state_file = Path.join(data_folder, "state.exs")
-      state = Workshop.State.Agent.get(var!(state_agent, Workshop.State))
-              |> Macro.to_string
+  def init() do
+    state_file = Path.join(find_workshop_data_folder!, "state.exs")
 
-      Path.join(data_folder, "state.exs")
-      |> File.write(state)
-    end
-  end
-
-  @doc """
-  Read and parse the state from disk.
-  """
-  def import_state do
-    {:ok, data_folder} = Workshop.Utils.find_workshop_data_folder
-    state_file = Path.join(data_folder, "state.exs")
     if File.exists? state_file do
       {state, _binding} = Code.eval_file(state_file)
       state
@@ -53,19 +25,52 @@ defmodule Workshop.State do
   end
 
   @doc """
-  Update the current state of the workshop.
+  Stop the state agent.
   """
-  def update(state, update) do
-    Keyword.merge(state, update, fn(_key, value1, value2) ->
-      Keyword.merge(value1, value2, &deep_merge/3)
-    end)
+  def stop do
+    Agent.stop(@name)
   end
 
-  defp deep_merge(_key, value1, value2) do
+  @doc """
+  Get value on a given `key` from the state agent. A `default` value can be
+  set if needed.
+  """
+  def get(key, default \\ nil) do
+    Agent.get(@name, Keyword, :get, [key, default])
+  end
+
+  @doc """
+  Put a `value` on the given `key`. This will overwrite the keys current
+  value.
+  """
+  def put(key, value) do
+    Agent.update(@name, Keyword, :put, [key, value])
+  end
+
+  @doc """
+  Update the given key with the given data. If the key holds a keyword list,
+  and the data is a keyword list the two will get merged.
+  """
+  def update(key, data) do
+    Agent.update(@name, Keyword, :update, [key, data, fn state ->
+      Keyword.merge(state, data, &do_deep_merge/3)
+    end])
+  end
+  # merge two keyword lists, or overwrite if one of the two is not a keyword list
+  defp do_deep_merge(_key, value1, value2) do
     if Keyword.keyword?(value1) and Keyword.keyword?(value2) do
-      Keyword.merge(value1, value2, &deep_merge/3)
+      Keyword.merge(value1, value2, &do_deep_merge/3)
     else
       value2
     end
+  end
+
+  @doc """
+  Commit the data to disk. Will raise an exception if the write failed.
+  """
+  def persist! do
+    find_workshop_data_folder!
+    |> Path.join("state.exs")
+    |> File.write(Macro.to_string(Agent.get(@name, &(&1))))
   end
 end
