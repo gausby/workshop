@@ -1,9 +1,9 @@
 defmodule Mix.Tasks.Workshop.Next do
   use Mix.Task
   import Mix.Generator
-  import Workshop.Utils, only: [find_exercise_folders!: 1,
+  import Workshop.Utils, only: [find_exercise_folders!: 0,
                                 find_workshop_folder: 0,
-                                find_workshop_data_folder: 0]
+                                find_workshop_data_folder!: 0]
 
   def run(_) do
     File.cd("sandbox") # for developent
@@ -22,13 +22,9 @@ defmodule Mix.Tasks.Workshop.Next do
   end
 
   defp find_next_exercise do
-    {:ok, path} = find_workshop_data_folder
-    exercises = Path.join(path, "exercises")
-                |> find_exercise_folders!
+    [first| _] = find_exercise_folders!
 
-    [first| _] = exercises
-
-    path
+    find_workshop_data_folder!
     |> Path.join("exercises")
     |> Path.join(first)
   end

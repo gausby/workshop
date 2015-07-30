@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.Workshop.Exercises do
   use Mix.Task
   import Workshop.Utils, only: [find_workshop_data_folder: 0,
-                                find_exercise_folders!: 1,
+                                find_exercise_folders!: 0,
                                 get_exercise_title!: 1]
   alias IO.ANSI.Docs
 
@@ -16,8 +16,7 @@ defmodule Mix.Tasks.Workshop.Exercises do
     metadata = Workshop.Meta.info
     exercises_folder = Path.join(path, "exercises")
 
-    exercises = exercises_folder
-                |> find_exercise_folders!
+    exercises = find_exercise_folders!
                 |> Enum.map(&(Path.join(exercises_folder, &1)))
                 |> Enum.map(&get_exercise_title!/1)
                 |> Enum.with_index

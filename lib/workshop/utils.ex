@@ -45,6 +45,12 @@ defmodule Workshop.Utils do
     end
   end
 
+  def find_exercise_folders! do
+    find_workshop_data_folder!
+    |> Path.join("exercises")
+    |> find_exercise_folders!
+  end
+
   def find_exercise_folders!(folder) do
     folder
     |> File.ls!
