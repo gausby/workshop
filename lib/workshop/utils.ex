@@ -45,6 +45,14 @@ defmodule Workshop.Utils do
     end
   end
 
+  @doc """
+  Find the workshop folder or fail with an exception
+  """
+  def find_workshop_folder! do
+    {:ok, path} = find_workshop_folder
+    path
+  end
+
   def find_exercise_folders! do
     find_workshop_data_folder!
     |> Path.join("exercises")
@@ -77,5 +85,9 @@ defmodule Workshop.Utils do
                   {String.to_integer(number), name}
                end)
     |> Enum.sort
+  end
+
+  def ensure_state do
+    Workshop.State.start_link
   end
 end
