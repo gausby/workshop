@@ -55,7 +55,8 @@ defmodule Workshop.Utils do
 
   # workshops should get prefixed with a weight
   def get_exercises_by_weight! do
-    File.ls!(File.cwd!)
+    Workshop.Session.get(:exercises_folder)
+    |> File.ls!
     |> Enum.reject(&(String.starts_with?(&1, ".")))
     |> Enum.map(fn item ->
                   [number, name] = String.split(item, "_", parts: 2)
