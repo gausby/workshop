@@ -1,26 +1,21 @@
 defmodule Mix.Tasks.Workshop.Next do
   use Mix.Task
   import Mix.Generator
-  import Workshop.Utils, only: [find_exercise_folders!: 0,
-                                find_workshop_folder!: 0,
-                                find_workshop_data_folder!: 0,
-                                ensure_state: 0]
+  import Workshop.Utils, only: [find_exercise_folders!: 0]
 
   def run(_) do
-    File.cd("sandbox") # for developent
-    ensure_state()
+    Workshop.start([], [])
 
     case find_next_exercise do
       :workshop_over ->
         Mix.shell.info "show workshop debriefing message!"
 
       {:next, exercise} ->
-        source = find_workshop_data_folder!
-               |> Path.join("exercises")
-               |> Path.join(exercise)
-               |> Path.join("files")
+        source = Workshop.Session.get(:exercises_folder)
+                 |> Path.join(exercise)
+                 |> Path.join("files")
 
-        destination = find_workshop_folder!
+        destination = Workshop.Session.get(:folder)
                       |> Path.join(exercise)
 
         case File.mkdir(destination) do

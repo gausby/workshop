@@ -2,7 +2,7 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
   use Mix.Task
   import Mix.Generator
   import Mix.Utils, only: [camelize: 1]
-  import Workshop.Utils, only: [find_workshop_data_folder: 0, get_exercises_by_weight!: 0]
+  import Workshop.Utils, only: [get_exercises_by_weight!: 0]
 
   @shortdoc "Create a new exercise for a workshop"
   @moduledoc """
@@ -19,11 +19,10 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
   """
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do
+    Workshop.start([], [])
     {opts, argv, _} = OptionParser.parse(argv, switches: [])
 
-    File.cd("sandbox") # for development
-    {:ok, data_folder} = find_workshop_data_folder
-    path = Path.join(data_folder, "exercises")
+    path = Workshop.Session.get(:exercises_folder)
     # update current working dir
     File.cd!(path)
 
@@ -81,7 +80,7 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
     |> Enum.join(" ")
   end
 
-  defp do_generate_exercise(name, title, mod, opts) do
+  defp do_generate_exercise(name, title, mod, _opts) do
     assigns = [name: name, title: title, module: mod]
 
     create_file "README.md", readme_template(assigns)

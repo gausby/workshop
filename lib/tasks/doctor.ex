@@ -1,6 +1,21 @@
 defmodule Mix.Tasks.Workshop.Doctor do
   use Mix.Task
-  import Workshop.Utils, only: [find_workshop_data_folder!: 0]
+
+  @spec run(OptionParser.argv) :: :ok
+  def run(argv) do
+    Workshop.start([], [])
+    {_, _, _} = OptionParser.parse(argv, switches: [system: :boolean])
+
+    result = Workshop.Session.get(:data_folder)
+             |> prerequisite_file
+             |> execute_prerequisite_check
+
+    System.at_exit fn _ ->
+      if result != :ok do
+        exit({:shutdown, 1})
+      end
+    end
+  end
 
   @prerequisite_file_name "prerequisite.exs"
   defp prerequisite_file(folder),
@@ -13,22 +28,6 @@ defmodule Mix.Tasks.Workshop.Doctor do
       apply(Workshop.Prerequisite, :run, [])
     else
       {:ok, "no prerequisites defined"}
-    end
-  end
-
-  @spec run(OptionParser.argv) :: :ok
-  def run(argv) do
-    File.cd! "sandbox" # for dev purposes
-    {_, _, _} = OptionParser.parse(argv, switches: [system: :boolean])
-
-    result = find_workshop_data_folder!
-             |> prerequisite_file
-             |> execute_prerequisite_check
-
-    System.at_exit fn _ ->
-      if result != :ok do
-        exit({:shutdown, 1})
-      end
     end
   end
 end

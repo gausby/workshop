@@ -1,4 +1,4 @@
-defmodule Workshop.State do
+defmodule Workshop.Session do
   @moduledoc false
   @name __MODULE__
 
@@ -8,29 +8,26 @@ defmodule Workshop.State do
   end
 
   @doc """
-  Initialize the state agent with data from `.workshop/state.exs`, or an
-  empty keyword list if that file does not exist.
+  Initialize the session agent.
   """
   def init() do
-    state_file = Workshop.Session.get(:data_folder) |> Path.join("state.exs")
-
-    if File.exists? state_file do
-      {state, _binding} = Code.eval_file(state_file)
-      state
-    else
-      []
-    end
+    workshop_folder = Workshop.Utils.find_workshop_folder!
+    [
+      folder: workshop_folder,
+      data_folder: workshop_folder |> Path.join(".workshop"),
+      exercises_folder: workshop_folder |> Path.join(".workshop") |> Path.join("exercises")
+    ]
   end
 
   @doc """
-  Stop the state agent.
+  Stop the session agent.
   """
   def stop do
     Agent.stop(@name)
   end
 
   @doc """
-  Get value on a given `key` from the state agent. A `default` value can be
+  Get value on a given `key` from the session agent. A `default` value can be
   set if needed.
   """
   def get(key, default \\ nil) do
@@ -61,14 +58,5 @@ defmodule Workshop.State do
     else
       value2
     end
-  end
-
-  @doc """
-  Commit the data to disk. Will raise an exception if the write failed.
-  """
-  def persist! do
-    Workshop.Session.get(:data_folder)
-    |> Path.join("state.exs")
-    |> File.write(Macro.to_string(Agent.get(@name, &(&1))))
   end
 end
