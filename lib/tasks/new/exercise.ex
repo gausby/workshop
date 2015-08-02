@@ -107,7 +107,12 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
 
   embed_template :exercise, """
   defmodule Workshop.Exercise.<%= @module %> do
+    use Workshop.Exercise
+
     @title "<%= @title %>"
+    @description \"""
+    @todo, write this exercise
+    \"""
   end
   """
 end
