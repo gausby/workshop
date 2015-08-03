@@ -15,10 +15,10 @@ defmodule Mix.Tasks.Workshop.Hint do
                                 |> Code.require_file
 
       workshop_title = Workshop.Meta.info[:title]
-      exercise_title = get(exercise_module, :title)
+      exercise_title = Workshop.Exercise.get(exercise_module, :title)
 
       Docs.print_heading "#{workshop_title} - #{exercise_title}", opts
-      Docs.print get(exercise_module, :hint), opts
+      Docs.print Workshop.Exercise.get(exercise_module, :hint), opts
     else
       Mix.shell.info "The workshop has not been started yet"
     end
