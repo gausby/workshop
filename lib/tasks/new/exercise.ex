@@ -110,8 +110,13 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
     use Workshop.Exercise
 
     @title "<%= @title %>"
+
     @description \"""
     @todo, write this exercise
+    \"""
+
+    @hint \"""
+    @todo, write a hint for completing this exercise
     \"""
   end
   """
