@@ -8,8 +8,8 @@ defmodule Mix.Tasks.Workshop.Validate do
 
     %{errors: []}
     |> should_at_least_have_one_exercise
-    |> should_unique_weights_for_exercises
-    |> should_unique_titles_for_exercises
+    |> should_have_unique_weights_for_exercises
+    |> should_have_unique_titles_for_exercises
     |> handle_validation_result
   end
 
@@ -31,17 +31,34 @@ defmodule Mix.Tasks.Workshop.Validate do
     if length(Workshop.Exercises.list!) > 0 do
       state
     else
-      %{state|errors: ["Workshop does not appear to have any exercises"|state.errors]}
+      message = "Workshop does not appear to have any exercises"
+      %{state|errors: [message|state.errors]}
     end
   end
 
-  # todo
-  defp should_unique_weights_for_exercises(state) do
-    state
+  defp should_have_unique_weights_for_exercises(state) do
+    exercises = Workshop.Exercises.list!
+                |> Enum.map(&(String.split(&1, "_", parts: 2)))
+                |> Enum.map(fn [weight, _] -> String.to_integer(weight) end)
+
+    if length(exercises) == length(Enum.uniq(exercises)) do
+      state
+    else
+      message = "Two or more exercises has the same weight, please make the weights unique"
+      %{state|errors: [message|state.errors]}
+    end
   end
 
-  # todo
-  defp should_unique_titles_for_exercises(state) do
-    state
+  defp should_have_unique_titles_for_exercises(state) do
+    exercises = Workshop.Exercises.list!
+                |> Enum.map(&(String.split(&1, "_", parts: 2)))
+                |> Enum.map(fn [_, title] -> title end)
+
+    if length(exercises) == length(Enum.uniq(exercises)) do
+      state
+    else
+      message = "Two or more exercises has the same title, please make the titles unique"
+      %{state|errors: [message|state.errors]}
+    end
   end
 end
