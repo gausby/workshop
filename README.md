@@ -21,10 +21,10 @@ Optionally it should run the acceptance test and lock if it does not pass.
 Not implemented. Should go to the previous exercise.
 
 ### `info`
-Not implemented. Should display the text for the current exercise.
+Display info about the current exercise, or info about the workshop if it hasn't been started yet.
 
 ### `hint`
-Not implemented. Should display a hint about the current exercise. Like info, but with a bit more help for finishing the exercise.
+Display a hint about the current exercise. Like info, but with a bit more help for finishing the exercise.
 
 ### `check`
 Not implemented. Should run the acceptance test against the users solution for the current exercise.
