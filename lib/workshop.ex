@@ -2,7 +2,14 @@ defmodule Workshop do
   use Application
 
   def start(_type, _args) do
-    File.cd! Path.expand("sandbox") # for development purposes
+    if System.get_env("sandbox") do
+      # For development purposes. Use any of the workshop commands like this:
+      #
+      #    $ sandbox=foo mix workshop.info
+      #
+      # To use the `foo` folder in the current directory as the target workshop.
+      System.get_env("sandbox") |> Path.expand |> File.cd!
+    end
 
     Workshop.Supervisor.start_link([])
     # load workshop meta info
