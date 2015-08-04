@@ -15,4 +15,6 @@ defmodule Workshop do
     # load workshop meta info
     Workshop.Session.get(:data_folder) |> Path.join("workshop.exs") |> Code.require_file
   end
+
+  defdelegate validate, to: Workshop.Validate, as: :run
 end
