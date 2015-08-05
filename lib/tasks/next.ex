@@ -18,15 +18,17 @@ defmodule Mix.Tasks.Workshop.Next do
         destination = Workshop.Session.get(:folder)
                       |> Path.join(exercise)
 
-        case File.mkdir(destination) do
+        result_message = case File.mkdir(destination) do
           :ok ->
             copy_exercise_files_to_sandbox(source, destination)
-            Workshop.State.update(:progress, cursor: exercise)
-            Workshop.State.persist!
-            Mix.shell.info "Exercise files written to #{destination}"
+            "Exercise files written to #{destination}"
           {:error, :eexist} ->
-            Mix.shell.info "Exercise folder #{destination} already exist"
+            "Exercise folder #{destination} already exist"
         end
+
+        Workshop.State.update(:progress, cursor: exercise)
+        Workshop.State.persist!
+        Mix.shell.info result_message
     end
   end
 
