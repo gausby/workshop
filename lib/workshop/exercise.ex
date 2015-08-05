@@ -14,6 +14,9 @@ defmodule Workshop.Exercise do
       _ -> nil
     end
   end
+
+  defdelegate validate(exercise), to: Workshop.Exercise.Validate, as: :run
+
   @spec load(String.t) :: atom
   def load(folder) do
     loaded = Workshop.Session.get(:exercises, [])
