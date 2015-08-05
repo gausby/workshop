@@ -1,5 +1,6 @@
 defmodule Mix.Tasks.Workshop.Validate do
   use Mix.Task
+  alias Workshop.ValidationResult, as: Result
 
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do
@@ -10,10 +11,10 @@ defmodule Mix.Tasks.Workshop.Validate do
     |> handle_validation_result
   end
 
-  defp handle_validation_result(%Workshop.Validate.Result{errors: []}) do
+  defp handle_validation_result(%Result{runs: x, passed: x}) do
     Mix.shell.info "Everything seems to be in order"
   end
-  defp handle_validation_result(%Workshop.Validate.Result{errors: errors}) do
+  defp handle_validation_result(%Result{errors: errors}) do
     Mix.shell.error """
     This does not seem to be a valid workshop. Please fix the following errors:
 

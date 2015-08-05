@@ -1,44 +1,48 @@
 defmodule Workshop.Validate do
-  defmodule Result do
-    defstruct errors: []
-  end
+  alias Workshop.ValidationResult, as: Result
 
   def run do
-    %Result{}
-    |> should_at_least_have_one_exercise
-    |> should_have_unique_weights_for_exercises
-    |> should_have_unique_titles_for_exercises
+    tests = [
+      &should_have_at_least_one_exercise/0,
+      &should_have_unique_weights_for_exercises/0,
+      &should_have_unique_titles_for_exercises/0
+    ]
+
+    for test <- tests, into: %Result{}, do: apply(test, [])
   end
 
-  # helper function for altering the result state
-  defp add_error(state, message) when is_nil(message), do: state
-  defp add_error(state, message) when is_bitstring(message) do
-    %Result{state|errors: [message|state.errors]}
+  defp should_have_at_least_one_exercise do
+    cond do
+      length(Workshop.Exercises.list!) <= 0 ->
+        {:error, "The workshop should have at least one exercise"}
+      :otherwise ->
+        :ok
+    end
   end
 
-  defp should_at_least_have_one_exercise(result) do
-    add_error(result, unless length(Workshop.Exercises.list!) > 0 do
-      "The workshop should have at least one exercise"
-    end)
-  end
-
-  defp should_have_unique_weights_for_exercises(result) do
+  defp should_have_unique_weights_for_exercises do
     exercises = Workshop.Exercises.list!
                 |> Enum.map(&(String.split(&1, "_", parts: 2)))
                 |> Enum.map(fn [weight, _] -> String.to_integer(weight) end)
 
-    add_error(result, unless length(exercises) == length(Enum.uniq(exercises)) do
-      "Two or more exercises has the same weight, please make the weights unique"
-    end)
+    cond do
+      length(exercises) != length(Enum.uniq(exercises)) ->
+        {:error, "Two or more exercises has the same weight, please make the weights unique"}
+      :otherwise ->
+        :ok
+    end
   end
 
-  defp should_have_unique_titles_for_exercises(result) do
+  defp should_have_unique_titles_for_exercises do
     exercises = Workshop.Exercises.list!
                 |> Enum.map(&(String.split(&1, "_", parts: 2)))
                 |> Enum.map(fn [_, title] -> title end)
 
-    add_error(result, unless length(exercises) == length(Enum.uniq(exercises)) do
-      "Two or more exercises has the same title, please make the titles unique"
-    end)
+    cond do
+      length(exercises) != length(Enum.uniq(exercises)) ->
+        {:error, "Two or more exercises has the same title, please make the titles unique"}
+      :otherwise ->
+        :ok
+    end
   end
 end
