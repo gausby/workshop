@@ -14,4 +14,21 @@ defmodule Workshop.Exercise do
       _ -> nil
     end
   end
+  @spec load(String.t) :: atom
+  def load(folder) do
+    loaded = Workshop.Session.get(:exercises, [])
+    key = String.to_atom(folder)
+    case List.keyfind loaded, key, 0 do
+      {^key, exercise_module} ->
+        exercise_module
+      _ ->
+        [{exercise_module,_}|_] = folder
+                                  |> Path.expand(Workshop.Session.get(:exercises_folder))
+                                  |> Path.join("exercise.exs")
+                                  |> Code.require_file
+
+        Workshop.Session.put :exercises, [{key, exercise_module} | loaded]
+        exercise_module
+    end
+  end
 end
