@@ -87,9 +87,27 @@ defmodule Mix.Tasks.Workshop.New.Workshop do
   """
 
   embed_template :prerequisite, """
-  defmodule <%= @module %>.Prerequisite do
-    def run() do
-      :ok
+  defmodule Workshop.Prerequisite do
+    @type result :: :ok | {:error, String.t} | {:warning, String.t}
+    @type test_function :: (() -> result)
+
+    @spec run :: [test_function]
+    def run do
+      # register all the checks in this list
+      [&should_check_the_truth/0]
+    end
+
+    @spec should_check_the_truth :: result
+    defp should_check_the_truth do
+      # just remove and replace this example check
+      case 1 + 1 do
+        2 ->
+          :ok
+        3 ->
+          {:warning, "Math doesn't seem to work, but we'll work with it"}
+        :otherwise ->
+          {:error, "Something is seriously wrong with the universe"}
+      end
     end
   end
   """
