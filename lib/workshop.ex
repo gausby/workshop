@@ -17,4 +17,7 @@ defmodule Workshop do
   end
 
   defdelegate validate, to: Workshop.Validate, as: :run
+
+  defdelegate doctor, to: Workshop.Doctor, as: :run
+
 end
