@@ -1,4 +1,6 @@
 defmodule Workshop.Exercise do
+  import Mix.Generator
+
   @doc false
   defmacro __using__(_opts) do
     quote do
@@ -33,5 +35,40 @@ defmodule Workshop.Exercise do
         Workshop.Session.put :exercises, [{key, exercise_module} | loaded]
         exercise_module
     end
+  end
+
+  @spec files_folder(String.t) :: String.t
+  def files_folder(exercise_folder) do
+    Workshop.Session.get(:exercises_folder)
+    |> Path.join(exercise_folder)
+    |> Path.join("files")
+  end
+
+  @spec copy_files_to_sandbox(String.t) :: :ok | {:error, String.t}
+  def copy_files_to_sandbox(exercise_folder) do
+    destination = Path.expand(exercise_folder, Workshop.Session.get(:folder))
+    case create_directory(destination) do
+      :ok ->
+        files_folder(exercise_folder)
+        |> do_copy_files_to_sandbox(destination)
+        :ok
+      _ ->
+        {:error, "Could not create destination folder"}
+    end
+  end
+
+  defp do_copy_files_to_sandbox(source, destination) do
+    source
+    |> File.ls!
+    |> Enum.each(fn item ->
+      if File.dir? item do
+        new_destination = Path.join(destination, item)
+        create_directory(new_destination)
+        do_copy_files_to_sandbox(Path.join(source, item), new_destination)
+      else
+        content = File.read!(Path.join(source, item))
+        create_file(Path.join(destination, item), content)
+      end
+    end)
   end
 end
