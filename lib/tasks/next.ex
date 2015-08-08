@@ -1,6 +1,6 @@
 defmodule Mix.Tasks.Workshop.Next do
   use Mix.Task
-  import Workshop.Info
+  alias Workshop.Info
 
   def run(_) do
     Workshop.start([], [])
