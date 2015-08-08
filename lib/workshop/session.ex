@@ -3,20 +3,18 @@ defmodule Workshop.Session do
   @name __MODULE__
 
   @doc false
-  def start_link(opts) do
-    Agent.start_link(__MODULE__, :init, [], opts)
+  def start_link(workshop_folder, opts) do
+    Agent.start_link(__MODULE__, :init, [workshop_folder], opts)
   end
 
   @doc """
   Initialize the session agent.
   """
-  def init() do
-    workshop_folder = Workshop.Utils.find_workshop_folder!
-    [
-      folder: workshop_folder,
-      data_folder: workshop_folder |> Path.join(".workshop"),
-      exercises_folder: workshop_folder |> Path.join(".workshop") |> Path.join("exercises")
-    ]
+  def init(workshop_folder) do
+    initial_state = [folder: workshop_folder,
+                     data_folder: workshop_folder |> Path.join(".workshop"),
+                     exercises_folder: workshop_folder |> Path.join(".workshop") |> Path.join("exercises")]
+    initial_state
   end
 
   @doc """

@@ -8,6 +8,15 @@ defmodule Workshop.Exercises do
     |> Enum.filter(&(File.dir?(Path.join(exercises_folder, &1))))
   end
 
+  def list_by_weight! do
+    list!
+    |> Enum.map(fn item ->
+                  [number, name] = String.split(item, "_", parts: 2)
+                  {String.to_integer(number), name}
+               end)
+    |> Enum.sort
+  end
+
   @spec find_next! :: {:next, String.t} | :workshop_over
   def find_next! do
     exercises = list!

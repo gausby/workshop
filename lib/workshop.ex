@@ -20,4 +20,20 @@ defmodule Workshop do
 
   defdelegate doctor, to: Workshop.Doctor, as: :run
 
+  def locate_root, do: File.cwd! |> locate_root
+  def locate_root(folder) do
+    candidate = Path.join(folder, ".workshop")
+    if File.exists?(candidate) and File.exists?(Path.join(candidate, "exercises")) do
+      {:ok, folder}
+    else
+      parent = Path.dirname(folder)
+      unless folder == parent do
+        locate_root parent
+      else
+        {:error, "Folder is not within a workshop"}
+      end
+    end
+  end
+
+
 end

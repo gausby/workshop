@@ -6,8 +6,10 @@ defmodule Workshop.Supervisor do
   end
 
   def init(opts) do
+    {:ok, workshop_folder} = Workshop.locate_root
+
     children = [
-      worker(Workshop.Session, [[name: Workshop.Session]]),
+      worker(Workshop.Session, [workshop_folder, [name: Workshop.Session]]),
       worker(Workshop.State, [[name: Workshop.State]])
     ]
     supervise(children, strategy: :one_for_one)

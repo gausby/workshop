@@ -2,7 +2,8 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
   use Mix.Task
   import Mix.Generator
   import Mix.Utils, only: [camelize: 1]
-  import Workshop.Utils, only: [get_exercises_by_weight!: 0]
+
+  alias Workshop.Exercises
 
   @shortdoc "Create a new exercise for a workshop"
   @moduledoc """
@@ -55,7 +56,7 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
   # calculate the next weight value for the next exercise
   @weight_increment 10
   defp get_next_exercise_weight do
-    current = case Enum.reverse(get_exercises_by_weight!) do
+    current = case Enum.reverse(Exercises.list_by_weight!) do
       [{weight, _} | _] ->
         weight
 
