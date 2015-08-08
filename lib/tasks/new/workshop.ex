@@ -77,7 +77,7 @@ defmodule Mix.Tasks.Workshop.New.Workshop do
     use Workshop.Info
 
     # The human readable title of the workshop.
-    @title "Sandbox"
+    @title "<%= @title %>"
 
     # The version number is used to verify what version of the workshop the user
     # is running.
@@ -86,9 +86,7 @@ defmodule Mix.Tasks.Workshop.New.Workshop do
     # The description should state what the user will learn from this workshop.
     # Perhaps mention the intended audience.
     @description \"""
-    This is taken from the description. I really like this approach.
-
-    I can do multiple lines. All sorts of things.
+    Describe the workshop here.
     \"""
 
     # The introduction should welcome the user to the workshop, set the
