@@ -1,8 +1,10 @@
 defmodule Mix.Tasks.Workshop.Exercises do
   use Mix.Task
-  import Workshop.Utils, only: [find_exercise_folders!: 0, get_exercise_title!: 1]
-  alias IO.ANSI.Docs
+
   alias Workshop.Info
+  alias Workshop.Exercise
+  alias Workshop.Exercises
+  alias IO.ANSI.Docs
 
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do
@@ -13,24 +15,21 @@ defmodule Mix.Tasks.Workshop.Exercises do
     Docs.print "#{list_exercises}", opts
   end
 
-  def list_exercises do
-    exercises_folder = Workshop.Session.get(:exercises_folder)
+  defp list_exercises do
     current_exercise = Workshop.State.get(:progress)[:cursor]
 
-    find_exercise_folders!
-    |> Enum.map(fn exercise ->
-         exercise_title = exercises_folder
-                          |> Path.join(exercise)
-                          |> get_exercise_title!
-         {exercise_title, Path.basename(exercise) == current_exercise}
-       end)
+    Exercises.list!
     |> Enum.with_index
-    |> Enum.map(fn
-         {{item, true}, index} ->
-           "  #{(index + 1)}. *#{item} (current)*\n"
+    |> Enum.map(fn {exercise, index} ->
+         number = index + 1
+         module = Exercise.load(exercise)
+         title = Exercise.get(module, :title)
 
-         {{item, _}, index} ->
-           "  #{(index + 1)}. #{item}\n"
+         if Path.basename(exercise) == current_exercise do
+           "  #{number}. *#{title} (current)*\n"
+         else
+           "  #{number}. #{title}\n"
+         end
        end)
   end
 end
