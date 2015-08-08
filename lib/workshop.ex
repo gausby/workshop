@@ -20,8 +20,18 @@ defmodule Workshop do
 
   defdelegate doctor, to: Workshop.Doctor, as: :run
 
-  def locate_root, do: File.cwd! |> locate_root
-  def locate_root(folder) do
+  @doc """
+  Attempt to find the workshop root folder by traversing the file system upwards untill
+  it find a folder which contains a *.workshop*-folder that has an *exercises* folder
+  within.
+
+  This allow the user to execute workshop commands from anywhere in the workshop folder
+  structure.
+
+  It takes one argument which is the name of the path it should start looking from.
+  """
+  @spec locate_root(String.t) :: {:ok, String.t} | {:error, String.t}
+  def locate_root(folder) when is_binary(folder) do
     candidate = Path.join(folder, ".workshop")
     if File.exists?(candidate) and File.exists?(Path.join(candidate, "exercises")) do
       {:ok, folder}
@@ -35,5 +45,12 @@ defmodule Workshop do
     end
   end
 
-
+  @doc """
+  Same as `locate_root/1` but will use the current working directory as the starting
+  point.
+  """
+  @spec locate_root() :: {:ok, String.t} | {:error, String.t}
+  def locate_root do
+    File.cwd! |> locate_root
+  end
 end
