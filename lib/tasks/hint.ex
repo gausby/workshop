@@ -11,11 +11,7 @@ defmodule Mix.Tasks.Workshop.Hint do
 
     current_exercise = Workshop.State.get(:progress)[:cursor]
     if current_exercise do
-      [{exercise_module,_}|_] = current_exercise
-                                |> Path.expand(Workshop.Session.get(:exercises_folder))
-                                |> Path.join("exercise.exs")
-                                |> Code.require_file
-
+      exercise_module = Exercise.load(current_exercise)
       workshop_title = Info.get(Workshop.Meta, :title)
       exercise_title = Exercise.get(exercise_module, :title)
 
