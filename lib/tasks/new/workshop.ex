@@ -73,15 +73,40 @@ defmodule Mix.Tasks.Workshop.New.Workshop do
   """
 
   embed_template :workshop, """
-  defmodule <%= @module %>.Meta do
-    def info do
-      [title: "<%= @title %>",
-      version: "0.0.1",
-      description: description]
-    end
+  defmodule Workshop.Meta do
+    use Workshop.Info
 
-    defp description, do: \"""
-    **TODO: write a short description of the workshop**
+    # The human readable title of the workshop.
+    @title "Sandbox"
+
+    # The version number is used to verify what version of the workshop the user
+    # is running.
+    @version "0.0.1"
+
+    # The description should state what the user will learn from this workshop.
+    # Perhaps mention the intended audience.
+    @description \"""
+    This is taken from the description. I really like this approach.
+
+    I can do multiple lines. All sorts of things.
+    \"""
+
+    # The introduction should welcome the user to the workshop, set the
+    # expectations, and inform the user to execute the next-command to get to the
+    # first exercise.
+    @introduction \"""
+    This is the introduction and it will get displayed when the workshop has been
+    started.
+
+    Don't forget to inform the user to write `mix workshop.next` to get to the
+    first exercise.
+    \"""
+
+    # The debriefing message will get shown when the workshop is over.
+    # This would be a good opportunity to congratulate the user; perhaps thank the
+    # user and; and ask for feedback.
+    @debriefing \"""
+    You have completed the last exercise. Congratulations!
     \"""
   end
   """

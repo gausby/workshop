@@ -1,6 +1,7 @@
 defmodule Mix.Tasks.Workshop.Start do
   use Mix.Task
   alias IO.ANSI.Docs
+  alias Workshop.Info
 
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do
@@ -31,8 +32,8 @@ defmodule Mix.Tasks.Workshop.Start do
   end
 
   defp handle_result(:ok) do
-    Docs.print_heading Workshop.Meta.info[:title]
-    Docs.print Workshop.Meta.info[:description]
+    Docs.print_heading Info.get(Workshop.Meta, :title)
+    Docs.print Info.get(Workshop.Meta, :introduction)
   end
   defp handle_result({:error, reason}) do
     Mix.shell.error reason

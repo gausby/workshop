@@ -2,13 +2,14 @@ defmodule Mix.Tasks.Workshop.Exercises do
   use Mix.Task
   import Workshop.Utils, only: [find_exercise_folders!: 0, get_exercise_title!: 1]
   alias IO.ANSI.Docs
+  alias Workshop.Info
 
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do
     Workshop.start([], [])
     {opts, _, _} = OptionParser.parse(argv, switches: [enabled: :boolean])
 
-    Docs.print_heading Workshop.Meta.info[:title], opts
+    Docs.print_heading Info.get(Workshop.Meta, :title), opts
     Docs.print "#{list_exercises}", opts
   end
 

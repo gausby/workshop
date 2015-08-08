@@ -1,12 +1,13 @@
 defmodule Mix.Tasks.Workshop.Next do
   use Mix.Task
+  import Workshop.Info
 
   def run(_) do
     Workshop.start([], [])
 
     case Workshop.Exercises.find_next! do
       :workshop_over ->
-        Mix.shell.info "show workshop debriefing message!"
+        Mix.shell.info Info.get(Workshop.Meta, :debriefing)
 
       {:next, exercise} ->
         case Workshop.Exercise.copy_files_to_sandbox(exercise) do
