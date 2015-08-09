@@ -3,6 +3,7 @@ defmodule Mix.Tasks.New.Exercise do
   import Mix.Generator
   import Mix.Utils, only: [camelize: 1]
 
+  alias Workshop.Exercise
   alias Workshop.Exercises
 
   @shortdoc "Create a new exercise for a workshop"
@@ -31,7 +32,10 @@ defmodule Mix.Tasks.New.Exercise do
       [] -> Mix.raise "Expected NAME to be given. Please use `mix new.exercise NAME`"
       [name|_] ->
         name = Path.basename(Path.expand(name))
-        check_workshop_name!(name)
+        unless Exercise.valid_name?(name) do
+          Mix.raise "Exercise name must start with a letter and have only lowercase " <>
+                    "letters, numbers and underscore, got: #{inspect name}"
+        end
         mod = camelize(name)
         title = snake_case_to_headline(name)
         exercise_folder = Path.join(path, get_next_exercise_weight <> "_" <> name)
@@ -64,14 +68,6 @@ defmodule Mix.Tasks.New.Exercise do
         0
     end
     current + @weight_increment |> Integer.to_string |> String.rjust(3, ?0)
-  end
-
-  defp check_workshop_name!(name) do
-    # taken from the `mix new` source code
-    unless name =~ ~r/^[a-z][\w_]*$/ do
-      Mix.raise "Exercise name must start with a letter and have only lowercase " <>
-                "letters, numbers and underscore, got: #{inspect name}"
-    end
   end
 
   defp snake_case_to_headline(name) do

@@ -37,6 +37,16 @@ defmodule Workshop.Exercise do
     end
   end
 
+  @doc """
+  Check whether or not the given name is a valid exercise name. A valid exercise
+  name shall start with a letter, and must only contain letters, underscores and
+  numbers.
+  """
+  @spec valid_name?(String.t) :: Boolean
+  def valid_name?(name) when is_bitstring(name) do
+    Regex.match?(~r/^[a-z][\w_]*$/, name) && name == String.downcase(name)
+  end
+
   @spec files_folder(String.t) :: String.t
   def files_folder(exercise_folder) do
     Workshop.Session.get(:exercises_folder)
