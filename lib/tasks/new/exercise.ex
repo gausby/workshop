@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Workshop.New.Exercise do
+defmodule Mix.Tasks.New.Exercise do
   use Mix.Task
   import Mix.Generator
   import Mix.Utils, only: [camelize: 1]
@@ -11,7 +11,7 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
 
   It expects a name for the new exercise
 
-      mix workshop.new NAME
+      mix new.workshop NAME
 
   The path will be named after the given NAME. Given `my_exercise` it will
   result in a workshop named *My Exercise*. The generated files will be
@@ -28,7 +28,7 @@ defmodule Mix.Tasks.Workshop.New.Exercise do
     File.cd!(path)
 
     case argv do
-      [] -> Mix.raise "Expected NAME to be given. Please use `mix workshop.new.exercise NAME`"
+      [] -> Mix.raise "Expected NAME to be given. Please use `mix new.exercise NAME`"
       [name|_] ->
         name = Path.basename(Path.expand(name))
         check_workshop_name!(name)

@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Workshop.New.Workshop do
+defmodule Mix.Tasks.New.Workshop do
   use Mix.Task
   import Mix.Generator
   import Mix.Utils, only: [camelize: 1]
@@ -9,7 +9,7 @@ defmodule Mix.Tasks.Workshop.New.Workshop do
 
   It expects a path for the workshop
 
-      mix workshop.new.workshop PATH
+      mix new.workshop PATH
 
   The path will be named after the given PATH. Given `my_workshop` will
   result in a workshop named *My Workshop*.
@@ -20,7 +20,7 @@ defmodule Mix.Tasks.Workshop.New.Workshop do
     {opts, argv, _} = OptionParser.parse(argv, switches: [])
 
     case argv do
-      [] -> Mix.raise "Expected PATH to be given. Please use `mix workshop.new.workshop PATH`"
+      [] -> Mix.raise "Expected PATH to be given. Please use `mix new.workshop PATH`"
       [path|_] ->
         name = Path.basename(Path.expand(path))
         check_workshop_name!(name)
