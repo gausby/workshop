@@ -1,4 +1,7 @@
 defmodule Workshop.Exercises do
+  @doc """
+  List the exercises in the current workshop
+  """
   @spec list!() :: [String.t]
   def list! do
     Workshop.Session.get(:exercises_folder)
@@ -8,6 +11,11 @@ defmodule Workshop.Exercises do
     |> Enum.map(&Path.basename/1)
   end
 
+  @doc """
+  List the exercises in the current workshop with the weight and the name
+  seperated in a tuple.
+  """
+  @spec list_by_weight!() :: [{Integer, String.t}]
   def list_by_weight! do
     list!
     |> Enum.map(fn item ->
@@ -17,7 +25,10 @@ defmodule Workshop.Exercises do
     |> Enum.sort
   end
 
-  @spec find_next! :: {:next, String.t} | :workshop_over
+  @doc """
+  Find the exercise succeeding the current exercise.
+  """
+  @spec find_next!() :: {:next, String.t} | :workshop_over
   def find_next! do
     exercises = list!
     case Workshop.State.get(:progress)[:cursor] do
