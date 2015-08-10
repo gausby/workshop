@@ -1,6 +1,7 @@
 defmodule Workshop.Validate do
   alias Workshop.ValidationResult, as: Result
 
+  @spec run() :: Result.t
   def run do
     tests = [
       &should_have_at_least_one_exercise/0,

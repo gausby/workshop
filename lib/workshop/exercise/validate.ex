@@ -1,6 +1,7 @@
 defmodule Workshop.Exercise.Validate do
   alias Workshop.ValidationResult, as: Result
 
+  @spec run(String.t) :: Result.t
   def run(exercise) when is_bitstring(exercise) do
     exercise_module = Workshop.Exercise.load(exercise)
 
