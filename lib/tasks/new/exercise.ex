@@ -42,7 +42,7 @@ defmodule Mix.Tasks.New.Exercise do
         end
         mod = camelize(name)
         title = snake_case_to_headline(name)
-        exercise_folder = Path.join(path, get_next_exercise_weight <> "_" <> name)
+        exercise_folder = Path.expand("#{get_next_exercise_weight}_#{name}", path)
 
         case File.mkdir_p(exercise_folder) do
           :ok ->
