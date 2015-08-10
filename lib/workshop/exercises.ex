@@ -1,11 +1,11 @@
 defmodule Workshop.Exercises do
+  @spec list!() :: [String.t]
   def list! do
-    exercises_folder = Workshop.Session.get(:exercises_folder)
-
-    exercises_folder
-    |> File.ls!
-    |> Enum.filter(&(String.match?(&1, ~r/^\d/)))
-    |> Enum.filter(&(File.dir?(Path.join(exercises_folder, &1))))
+    Workshop.Session.get(:exercises_folder)
+    |> Path.join("*/exercise.exs")
+    |> Path.wildcard
+    |> Enum.map(&(Path.rootname(&1, "exercise.exs")))
+    |> Enum.map(&Path.basename/1)
   end
 
   def list_by_weight! do
