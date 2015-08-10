@@ -12,7 +12,7 @@ defmodule Mix.Tasks.Workshop.Validate do
   end
 
   defp handle_validation_result(%Result{runs: x, passed: x}) do
-    Mix.shell.info "Everything seems to be in order"
+    Mix.shell.info "Everything seems to be in order (#{x}/#{x} passed)"
   end
   defp handle_validation_result(%Result{errors: errors}) do
     Mix.shell.error """

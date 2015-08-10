@@ -10,6 +10,14 @@ defmodule Workshop.ValidationResult do
       source, {:cont, {:warning, warning}} ->
         %__MODULE__{source|runs: source.runs + 1, passed: source.passed + 1, warnings: [warning|source.warnings]}
 
+      source, {:cont, results} when is_list(results) ->
+        Enum.reduce(results, source, fn %__MODULE__{} = result, acc ->
+          %__MODULE__{acc|errors: acc.errors ++ result.errors,
+                          warnings: acc.warnings ++ result.warnings,
+                          runs: acc.runs + result.runs,
+                          passed: acc.passed + result.passed}
+        end)
+
       source, {:cont, :ok} ->
         %__MODULE__{source|runs: source.runs + 1, passed: source.passed + 1}
 
