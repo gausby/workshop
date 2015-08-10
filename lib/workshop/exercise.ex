@@ -47,6 +47,16 @@ defmodule Workshop.Exercise do
     Regex.match?(~r/^[a-z][\w_]*$/, name) && name == String.downcase(name)
   end
 
+  @doc """
+  Check whether or not the given exercise name has been taken by an already
+  existing exercise.
+  """
+  @spec name_taken?(String.t) :: Boolean
+  def name_taken?(name) when is_bitstring(name) do
+    Workshop.Exercises.list_by_weight!
+    |> Enum.any?(&(elem(&1, 1) == name))
+  end
+
   @spec files_folder(String.t) :: String.t
   def files_folder(exercise_folder) do
     Workshop.Session.get(:exercises_folder)

@@ -36,6 +36,10 @@ defmodule Mix.Tasks.New.Exercise do
           Mix.raise "Exercise name must start with a letter and have only lowercase " <>
                     "letters, numbers and underscore, got: #{inspect name}"
         end
+        if Exercise.name_taken?(name) do
+          Mix.raise "The name #{inspect name} has already been taken. Please use " <>
+                    "another name for this exercise."
+        end
         mod = camelize(name)
         title = snake_case_to_headline(name)
         exercise_folder = Path.join(path, get_next_exercise_weight <> "_" <> name)
