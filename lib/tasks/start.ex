@@ -4,7 +4,7 @@ defmodule Mix.Tasks.Workshop.Start do
   alias Workshop.Info
 
   @spec run(OptionParser.argv) :: :ok
-  def run(argv) do
+  def run(_argv) do
     Workshop.start([], [])
 
     handle_result(cond do
