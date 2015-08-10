@@ -84,27 +84,11 @@ defmodule Mix.Tasks.New.Exercise do
   defp do_generate_exercise(name, title, mod, _opts) do
     assigns = [name: name, title: title, module: mod]
 
-    create_file "README.md", readme_template(assigns)
     create_file "exercise.exs", exercise_template(assigns)
     create_directory "files"
     create_directory "test"
     create_file "test/test_helper.exs", ""
   end
-
-  embed_template :readme, """
-  <%= @title %>
-  <%= String.replace(@title, ~r/./, "=") %>
-  **TODO: add a short description of the exercise**
-
-  What's next?
-  ------------
-  Type `mix workshop.check` to check your solution. If you pass you can proceed
-  to the next exercise by typing `mix workshop.next`. This is all done in the
-  terminal.
-
-  If you are confused you could try `mix workshop.hint`. Otherwise ask your
-  instructor or follow the directions on `mix workshop.help`.
-  """
 
   embed_template :exercise, """
   defmodule Workshop.Exercise.<%= @module %> do
@@ -114,6 +98,15 @@ defmodule Mix.Tasks.New.Exercise do
 
     @description \"""
     @todo, write this exercise
+
+    What's next?
+    ------------
+    Type `mix workshop.check` to check your solution. If you pass you can proceed
+    to the next exercise by typing `mix workshop.next`. This is all done in the
+    terminal.
+
+    If you are confused you could try `mix workshop.hint`. Otherwise ask your
+    instructor or follow the directions on `mix workshop.help`.
     \"""
 
     @hint \"""
