@@ -21,6 +21,7 @@ defmodule Mix.Tasks.Workshop.Info do
     else
       Docs.print_heading workshop_title, opts
       Docs.print Info.get(Workshop.Meta, :description), opts
+      Docs.print "This workshop has not been started yet. Type `mix workshop.start` to begin.", opts
     end
   end
 end
