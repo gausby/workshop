@@ -14,7 +14,7 @@ defmodule Workshop.State do
   def init() do
     state_file = Workshop.Session.get(:data_folder) |> Path.join("state.exs")
 
-    if File.exists? state_file do
+    if state_file_exists? do
       {state, _binding} = Code.eval_file(state_file)
       state
     else
@@ -70,5 +70,15 @@ defmodule Workshop.State do
     Workshop.Session.get(:data_folder)
     |> Path.join("state.exs")
     |> File.write(Macro.to_string(Agent.get(@name, &(&1))))
+  end
+
+  @doc """
+  Check if the state file has been created.
+  """
+  @spec state_file_exists? :: Boolean
+  def state_file_exists? do
+    "state.exs"
+    |> Path.expand(Workshop.Session.get(:data_folder))
+    |> File.exists?
   end
 end

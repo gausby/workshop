@@ -8,6 +8,8 @@ defmodule Mix.Tasks.Workshop.Start do
     Workshop.start([], [])
 
     handle_result(cond do
+      Workshop.State.state_file_exists? ->
+        :already_started
       fail_doctor? ->
         {:error, """
         The system does not yet fit the requirements for this workshop.
@@ -34,6 +36,13 @@ defmodule Mix.Tasks.Workshop.Start do
   defp handle_result(:ok) do
     Docs.print_heading Info.get(Workshop.Meta, :title)
     Docs.print Info.get(Workshop.Meta, :introduction)
+  end
+  defp handle_result(:already_started) do
+    Mix.shell.info """
+    The Workshop has already been started.
+
+    Please type `mix workshop.help` if you need help.
+    """
   end
   defp handle_result({:error, reason}) do
     Mix.shell.error reason
