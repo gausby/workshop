@@ -5,10 +5,13 @@ defmodule Workshop.ValidationResult do
   def into(original) do
     {original, fn
       source, {:cont, {:error, error}} ->
-        %__MODULE__{source|runs: source.runs + 1, errors: [error|source.errors]}
+        %__MODULE__{source|errors: [error|source.errors],
+                           runs: source.runs + 1}
 
       source, {:cont, {:warning, warning}} ->
-        %__MODULE__{source|runs: source.runs + 1, passed: source.passed + 1, warnings: [warning|source.warnings]}
+        %__MODULE__{source|warnings: [warning|source.warnings],
+                           passed: source.passed + 1,
+                           runs: source.runs + 1}
 
       source, {:cont, results} when is_list(results) ->
         Enum.reduce(results, source, fn %__MODULE__{} = result, acc ->
