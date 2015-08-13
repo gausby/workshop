@@ -25,7 +25,8 @@ defmodule Mix.Tasks.New.Workshop do
         name = Path.basename(Path.expand(path))
         check_workshop_name!(name)
         mod = "Workshop"
-        title = snake_case_to_headline(name)
+        title = opts[:title] || snake_case_to_headline(name)
+
         case File.mkdir_p(path) do
           :ok ->
             File.cd!(path, fn ->
@@ -43,7 +44,7 @@ defmodule Mix.Tasks.New.Workshop do
     end
   end
 
-  defp do_generate_workshop(name, title, mod, opts \\ []) do
+  defp do_generate_workshop(name, title, mod, _opts) do
     assigns = [name: name, title: title, module: mod]
 
     create_file "README.md", readme_template(assigns)
