@@ -99,8 +99,7 @@ defmodule Mix.Tasks.New.Exercise do
     @description \"""
     @todo, write this exercise
 
-    What's next?
-    ------------
+    # What's next?
     Type `mix workshop.check` to check your solution. If you pass you can proceed
     to the next exercise by typing `mix workshop.next`. This is all done in the
     terminal.
