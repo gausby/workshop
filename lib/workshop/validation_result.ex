@@ -25,7 +25,8 @@ defmodule Workshop.ValidationResult do
         %__MODULE__{source|runs: source.runs + 1, passed: source.passed + 1}
 
       source, :done ->
-        source
+        %__MODULE__{source|errors: Enum.reverse(source.errors),
+                           warnings: Enum.reverse(source.warnings)}
 
       _source, :halt ->
         :ok

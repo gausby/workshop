@@ -42,4 +42,14 @@ defmodule Workshop.ValidationResultTest do
     assert result.passed == 2
     assert result.runs == length(input)
   end
+
+  test "should return error messages in the order they occurred" do
+    result = [{:error, "one"}, {:error, "two"}, {:error, "three"}] |> Enum.into(%Result{})
+    assert ["one", "two", "three"] = result.errors
+  end
+
+  test "should return warning messages in the order they occurred" do
+    result = [{:warning, "foo"}, {:warning, "bar"}, {:warning, "baz"}] |> Enum.into(%Result{})
+    assert ["foo", "bar", "baz"] = result.warnings
+  end
 end
