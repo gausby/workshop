@@ -6,14 +6,13 @@ Commands (Work in progress)
 ---------------------------
 All commands should start with `mix workshop.*command*`.
 
-### `start`
-Not implemented. Should setup the working directory and show the first exercise.
-
 ### `exercises`
 Not implemented. Should list exercises in the current workshop. Potentially show which exercise is the current one.
 
 ### `next`
 Not fully implemented. Should proceed to the next exercise.
+
+If the workshop has not been started yet (no state file has been created), the system integrity test and workshop integrity test will get executed.
 
 Optionally it should run the acceptance test and lock if it does not pass.
 
