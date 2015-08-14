@@ -77,7 +77,19 @@ The purpose is to check the system for existence of workshop dependencies; ie. a
 This is where the exercises created with `mix new.exercise` are stored.
 
 ### `new.exercise`
-Create and add a new exercise from a template to the current workshop.
+Create and add a new exercise from a template to the current workshop. This command needs to be executed from within a folder structure created by (or similar to) `mix new.workshop NAME`.
+
+```bash
+$ cd my_workshop
+$ mix new.exercise my_first_exercise
+* creating exercise.exs
+* creating files/
+* creating test/
+* creating test/test_helper.exs
+[omitted output]
+```
+
+These files will get created in *my_workshop/.workshop/exercises/010_my_first_exercise*. The "010" part of the destination folder is an auto generated, auto incremental, number based on the number of exercise with the largest assigned number plus 10. This is done so a new exercise can get moved between two already created exercises by changing its "weight" to a number between the two tasks.
 
 Checking dependencies for the workshop
 --------------------------------------
