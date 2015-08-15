@@ -86,6 +86,7 @@ defmodule Mix.Tasks.New.Exercise do
 
     create_file "exercise.exs", exercise_template(assigns)
     create_directory "files"
+    create_directory "solution"
     create_directory "test"
     create_file "test/test_helper.exs", ""
   end
