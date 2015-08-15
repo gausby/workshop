@@ -12,8 +12,14 @@ defmodule Workshop.Exercise do
   @spec get(atom, atom) :: String.t | nil
   def get(module, subject) when is_atom(module) and is_atom(subject) do
     case List.keyfind module.__info__(:attributes), subject, 0 do
-      {^subject, [content|_]} -> content
-      _ -> nil
+      {:hint, content} ->
+        content
+
+      {^subject, [content|_]} ->
+        content
+
+      _ ->
+        nil
     end
   end
 
@@ -90,5 +96,16 @@ defmodule Workshop.Exercise do
         create_file(Path.join(destination, item), content)
       end
     end)
+  end
+
+  @doc """
+  Get the short name of a given module
+  """
+  @spec get_identifer(Atom) :: Atom
+  def get_identifer(exercise_module) do
+    exercise_module
+    |> to_string |> String.split(".")
+    |> Enum.reverse |> hd
+    |> String.to_atom
   end
 end

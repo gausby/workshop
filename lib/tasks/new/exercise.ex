@@ -109,9 +109,11 @@ defmodule Mix.Tasks.New.Exercise do
     instructor or follow the directions on `mix workshop.help`.
     \"""
 
-    @hint \"""
-    @todo, write a hint for completing this exercise
-    \"""
+    @hint [
+      \"""
+      @todo, write a couple of hints for the solving this exercise
+      \"""
+    ]
   end
   """
 end
