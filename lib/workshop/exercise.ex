@@ -108,4 +108,21 @@ defmodule Workshop.Exercise do
     |> Enum.reverse |> hd
     |> String.to_atom
   end
+
+  @doc """
+  Increment the number of given hints for the given exercise
+  """
+  @spec increment_hint_counter(Atom) :: nil
+  def increment_hint_counter(exercise_module) do
+    exercises_state = Workshop.State.get(:exercises, [])
+    hints = get(exercise_module, :hint)
+
+    identifier = get_identifer(exercise_module)
+    current_exercise_state = exercises_state[identifier] || [{:hint, 0}]
+    if current_exercise_state[:hint] < length hints do
+      new_state = Keyword.update!(current_exercise_state, :hint, &(&1 + 1))
+      Workshop.State.update(:exercises, Keyword.put(exercises_state, identifier, new_state))
+      Workshop.State.persist!
+    end
+  end
 end
