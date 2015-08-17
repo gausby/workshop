@@ -87,7 +87,3 @@ $ mix new.exercise my_first_exercise
 ```
 
 These files will get created in *my_workshop/.workshop/exercises/010_my_first_exercise*. The "010" part of the destination folder is an auto generated, auto incremental, number based on the number of exercise with the largest assigned number plus 10. This is done so a new exercise can get moved between two already created exercises by changing its "weight" to a number between the two tasks.
-
-Checking dependencies for the workshop
---------------------------------------
-Checks in a `prerequisite.exs` file will get executed if this file exist. The file should contain a module that implements a `run/1` function.
