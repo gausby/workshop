@@ -21,10 +21,10 @@ defmodule Mix.Tasks.Workshop.Validate do
     #{warnings |> Enum.map(&("  * #{&1}")) |> Enum.join("\n")}
     """
   end
-  defp handle_validation_result(%Result{errors: errors, warnings: warnings}) do
-    messages = Enum.map(errors, &("Error: #{&1}")) ++ Enum.map(warnings, &("Warning: #{&1}"))
+  defp handle_validation_result(%Result{} = result) do
+    messages = Enum.map(result.errors, &("Error: #{&1}")) ++ Enum.map(result.warnings, &("Warning: #{&1}"))
     Mix.shell.error """
-    This does not seem to be a valid workshop. Please fix the following:
+    #{result.passed}/#{result.runs} passed. Please fix the following issues:
 
     #{messages |> Enum.map(&("  * #{&1}")) |> Enum.join("\n")}
     """
