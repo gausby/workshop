@@ -4,7 +4,7 @@ defmodule Workshop.Info do
   @doc false
   defmacro __using__(_opts) do
     quote do
-      Enum.each [:title, :version, :description, :introduction, :debriefing],
+      Enum.each [:title, :version, :description, :shortdesc, :introduction, :debriefing],
         &Module.register_attribute(__MODULE__, &1, persist: true)
     end
   end

@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Workshop.Exercises do
+defmodule Mix.Tasks.Workshop do
   use Mix.Task
 
   alias Workshop.Info
@@ -12,7 +12,14 @@ defmodule Mix.Tasks.Workshop.Exercises do
     {opts, _, _} = OptionParser.parse(argv, switches: [enabled: :boolean])
 
     Docs.print_heading Info.get(Workshop.Meta, :title), opts
-    Docs.print "#{list_exercises}", opts
+    Docs.print """
+    #{Info.get(Workshop.Meta, :shortdesc)}
+
+    #{list_exercises}
+
+    Type `mix workshop.info` for information about this workshop.
+    Type `mix workshop.help` if you need help.
+    """, opts
   end
 
   defp list_exercises do

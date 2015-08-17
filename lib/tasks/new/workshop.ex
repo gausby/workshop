@@ -84,6 +84,10 @@ defmodule Mix.Tasks.New.Workshop do
     # is running.
     @version "0.0.1"
 
+    # An optional short description of the workshop. Will get shown at places
+    # where the long description would not fit, such as the `mix workshop` screen.
+    @shortdesc nil
+
     # The description should state what the user will learn from this workshop.
     # Perhaps mention the intended audience.
     @description \"""
