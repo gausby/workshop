@@ -87,3 +87,8 @@ $ mix new.exercise my_first_exercise
 ```
 
 These files will get created in *my_workshop/.workshop/exercises/010_my_first_exercise*. The "010" part of the destination folder is an auto generated, auto incremental, number based on the number of exercise with the largest assigned number plus 10. This is done so a new exercise can get moved between two already created exercises by changing its "weight" to a number between the two tasks.
+
+### `mix workshop.validate`
+Will check if the workshop is valid. This can aid in the development of workshops.
+
+Notice: this will also get run when the end user start the workshop. This is done to help preventing the user getting stuck in a broken workshop; if the workshop is not valid it will not start.
