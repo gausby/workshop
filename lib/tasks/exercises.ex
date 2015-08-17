@@ -16,7 +16,7 @@ defmodule Mix.Tasks.Workshop.Exercises do
   end
 
   defp list_exercises do
-    current_exercise = Workshop.State.get(:progress)[:cursor]
+    current_exercise = Workshop.Session.get(:current_exercise)
 
     Exercises.list!
     |> Enum.with_index
@@ -26,7 +26,7 @@ defmodule Mix.Tasks.Workshop.Exercises do
          title = Exercise.get(module, :title)
 
          if Path.basename(exercise) == current_exercise do
-           "  #{number}. *#{title} (current)*\n"
+           "  #{number}. *#{title}*\n"
          else
            "  #{number}. #{title}\n"
          end

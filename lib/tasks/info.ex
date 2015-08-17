@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Workshop.Info do
     {opts, _, _} = OptionParser.parse(argv, switches: [enabled: :boolean])
 
     workshop_title = Info.get(Workshop.Meta, :title)
-    current_exercise = Workshop.State.get(:progress)[:cursor]
+    current_exercise = Workshop.Session.get(:current_exercise)
 
     if current_exercise do
       exercise_module = Exercise.load(current_exercise)
@@ -21,7 +21,6 @@ defmodule Mix.Tasks.Workshop.Info do
     else
       Docs.print_heading workshop_title, opts
       Docs.print Info.get(Workshop.Meta, :description), opts
-      Docs.print "This workshop has not been started yet. Type `mix workshop.start` to begin.", opts
     end
   end
 end

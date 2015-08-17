@@ -9,7 +9,7 @@ defmodule Mix.Tasks.Workshop.Hint do
     Workshop.start([], [])
     {opts, _, _} = OptionParser.parse(argv, switches: [system: :boolean])
 
-    current_exercise = Workshop.State.get(:progress)[:cursor]
+    current_exercise = Workshop.Session.get(:current_exercise)
     if current_exercise do
       exercise_module = Exercise.load(current_exercise)
       hints = Exercise.get(exercise_module, :hint)
@@ -39,7 +39,7 @@ defmodule Mix.Tasks.Workshop.Hint do
       #{help}
       """, opts
     else
-      Mix.shell.info "The workshop has not been started yet"
+      Mix.shell.info "This command should get executed from a exercise folder"
     end
   end
 end

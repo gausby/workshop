@@ -4,19 +4,13 @@ defmodule Mix.Tasks.Workshop.Check do
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do
     Workshop.start([], [])
-    {opts, _, _} = OptionParser.parse(argv, switches: [system: :boolean])
+    {_opts, _, _} = OptionParser.parse(argv, switches: [system: :boolean])
 
-    current_exercise = Workshop.State.get(:progress)
+    current_exercise = Workshop.Session.get(:current_exercise)
     if current_exercise do
-      current_exercise_folder = Workshop.State.get(:progress)[:cursor]
-                                |> Path.expand(Workshop.Session.get(:exercises_folder))
-
-      # todo, run acceptance test
-      [{exercise_module, _} | _] = current_exercise_folder |> Path.join("exercise.exs") |> Code.require_file
-
-      IO.inspect exercise_module.__info__(:attributes)
+      Mix.shell.info "todo, run acceptance test!"
     else
-      Mix.shell.info "The workshop has not been started yet"
+      Mix.shell.info "This command should get executed from within an exercise folder"
     end
   end
 end
