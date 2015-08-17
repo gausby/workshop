@@ -16,9 +16,6 @@ If the workshop has not been started yet (no state file has been created), the s
 
 Optionally it should run the acceptance test and lock if it does not pass.
 
-### `previous`
-Not implemented. Should go to the previous exercise.
-
 ### `info`
 Display info about the current exercise, or info about the workshop if it hasn't been started yet.
 
