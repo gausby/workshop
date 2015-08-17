@@ -10,6 +10,7 @@ defmodule Workshop.Validate do
       &should_have_a_title/0,
       &should_have_a_version/0,
       &should_have_a_description/0,
+      &could_have_a_short_description/0,
       &should_have_an_introduction/0,
       &should_have_a_debriefing/0,
       &should_have_at_least_one_exercise/0,
@@ -43,6 +44,23 @@ defmodule Workshop.Validate do
     cond do
       Workshop.Info.get(Workshop.Meta, :description) == nil ->
         {:error, "The workshop should have a description"}
+      :otherwise ->
+        :ok
+    end
+  end
+
+  defp could_have_a_short_description do
+    shortdesc = Workshop.Info.get(Workshop.Meta, :shortdesc)
+    cond do
+      shortdesc == false ->
+        :ok
+      shortdesc == nil ->
+        {:warning, "Consider adding a short description to the workshop, " <>
+                   "or suppress this warning by setting @shortdesc to `false`"}
+      String.length(shortdesc) < 25 ->
+        {:error, "Workshop @shortdesc is too short. Please keep it longer than 25 chars."}
+      String.length(shortdesc) > 200 ->
+        {:error, "Workshop @shortdesc is too long. Please keep it below 200 chars."}
       :otherwise ->
         :ok
     end

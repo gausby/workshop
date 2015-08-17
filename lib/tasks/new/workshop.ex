@@ -86,6 +86,7 @@ defmodule Mix.Tasks.New.Workshop do
 
     # An optional short description of the workshop. Will get shown at places
     # where the long description would not fit, such as the `mix workshop` screen.
+    # Set this to `false` if you want to suppress the missing shortdesc warning.
     @shortdesc nil
 
     # The description should state what the user will learn from this workshop.
