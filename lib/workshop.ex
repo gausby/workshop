@@ -73,23 +73,16 @@ defmodule Workshop do
     end
   end
 
-  defp exercise_exists?(nil, _) do
-    false
-  end
+  defp exercise_exists?(nil, _), do: false
   defp exercise_exists?(exercise_name, exercise_folder) do
-    case String.split(exercise_name, "_", parts: 2) do
-      [_weight, name] ->
+    case Workshop.Exercise.split_weight_and_name(exercise_name) do
+      {_weight, name} ->
         Path.wildcard("#{exercise_folder}/*#{name}/exercise.exs")
         # get the name of the dir
         |> Enum.map(&Path.dirname/1) |> Enum.map(&Path.basename/1)
-        # split in weight and name
-        |> Enum.map(&(String.split(&1, "_", parts: 2)))
-        |> Enum.any?(fn
-          [_weight, current] ->
-            current == name
-          _ ->
-            false
-        end)
+        |> Enum.map(&Workshop.Exercise.split_weight_and_name/1)
+        |> Enum.map(&(elem(&1, 1)))
+        |> Enum.any?(&(&1 == name))
       _ ->
         false
     end

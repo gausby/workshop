@@ -1,4 +1,6 @@
 defmodule Workshop.Exercises do
+  alias Workshop.Exercise
+
   @doc """
   List the exercises in the current workshop
   """
@@ -18,10 +20,7 @@ defmodule Workshop.Exercises do
   @spec list_by_weight!() :: [{Integer, String.t}]
   def list_by_weight! do
     list!
-    |> Enum.map(fn item ->
-                  [number, name] = String.split(item, "_", parts: 2)
-                  {String.to_integer(number), name}
-               end)
+    |> Enum.map(&Exercise.split_weight_and_name/1)
     |> Enum.sort
   end
 

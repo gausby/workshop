@@ -125,4 +125,17 @@ defmodule Workshop.Exercise do
       Workshop.State.persist!
     end
   end
+
+  @doc """
+  Split the weight and name from a exercise folder name
+  """
+  @spec split_weight_and_name(String.t) :: {Integer, String.t}
+  def split_weight_and_name(exercise_name) do
+    case Regex.run(~r/^(\d+)_([\S]+)$/, exercise_name) do
+      [_, weight, name] ->
+        {String.to_integer(weight), name}
+      _ ->
+        {:error, "input was not a valid exercise folder name"}
+    end
+  end
 end
