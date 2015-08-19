@@ -81,12 +81,25 @@ $ cd my_workshop
 $ mix new.exercise my_first_exercise
 * creating exercise.exs
 * creating files/
+* creating solution/
 * creating test/
 * creating test/test_helper.exs
 [omitted output]
 ```
 
 These files will get created in *my_workshop/.workshop/exercises/010_my_first_exercise*. The "010" part of the destination folder is an auto generated, auto incremental, number based on the number of exercise with the largest assigned number plus 10. This is done so a new exercise can get moved between two already created exercises by changing its "weight" to a number between the two tasks.
+
+#### exercise.exs
+Contain meta data about a given workshop, such as its title, a description (and assignment), and a list of hints that will help the user complete the assignment.
+
+#### files/
+This folder contains files that will get copied into the workshop sandbox folder (the root of the workshop) when the exercise gets activated. The user will work with these files to solve the assignment.
+
+#### test/
+The test folder contains scripts used to verify the users solution. Think of it as unit tests that the user should not touch.
+
+#### solution/
+The solution folder should contain an implementation that solves the exercise. This will be run when the exercise is verified, so it should pass. This will also be used so that the user can compare solutions when their exercise has been handed in.
 
 ### `mix workshop.validate`
 Will check if the workshop is valid. This can aid in the development of workshops.
