@@ -24,8 +24,6 @@ defmodule Mix.Tasks.Workshop.Next do
       {:next, exercise} ->
         case Workshop.Exercise.copy_files_to_sandbox(exercise) do
           :ok ->
-            Workshop.State.update(:progress, cursor: exercise)
-            Workshop.State.persist!
             Mix.shell.info """
             Go ahead and work in #{exercise}
             """

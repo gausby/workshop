@@ -38,26 +38,6 @@ defmodule Workshop.Exercises do
   end
 
   @doc """
-  Find the exercise succeeding the current exercise.
-  """
-  @spec find_next!() :: {:next, String.t} | :workshop_over
-  def find_next! do
-    exercises = list!
-    case Workshop.State.get(:progress)[:cursor] do
-      nil ->
-        {:next, List.first(exercises)}
-      cursor ->
-        {_, remaining} = Enum.split_while(exercises, &(cursor != &1))
-        case remaining do
-          [_current | []] ->
-            :workshop_over
-          [_current, next|_] ->
-            {:next, next}
-        end
-    end
-  end
-
-  @doc """
   Will convert `name` to `weight_name` given a list of names and exercises
   """
   @spec get_weights_from_name([String.t], [String.t]) :: {Integer, String.t}
