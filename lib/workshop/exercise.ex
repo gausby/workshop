@@ -101,8 +101,8 @@ defmodule Workshop.Exercise do
   @doc """
   Get the short name of a given module
   """
-  @spec get_identifer(Atom) :: Atom
-  def get_identifer(exercise_module) do
+  @spec get_identifier(Atom) :: Atom
+  def get_identifier(exercise_module) do
     exercise_module
     |> to_string |> String.split(".")
     |> Enum.reverse |> hd
@@ -117,7 +117,7 @@ defmodule Workshop.Exercise do
     exercises_state = Workshop.State.get(:exercises, [])
     hints = get(exercise_module, :hint)
 
-    identifier = get_identifer(exercise_module)
+    identifier = get_identifier(exercise_module)
     current_exercise_state = exercises_state[identifier] || [{:hint, 0}]
     if current_exercise_state[:hint] < length hints do
       new_state = Keyword.update!(current_exercise_state, :hint, &(&1 + 1))
