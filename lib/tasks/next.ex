@@ -1,6 +1,7 @@
 defmodule Mix.Tasks.Workshop.Next do
   use Mix.Task
   alias Workshop.Info
+  alias Workshop.Progress
 
   def run(_) do
     Workshop.start([], [])
@@ -14,7 +15,9 @@ defmodule Mix.Tasks.Workshop.Next do
   end
 
   defp progress_to_next do
-    case Workshop.Exercises.find_next! do
+    source = Workshop.Session.get(:exercises_folder)
+    sandbox = Workshop.Session.get(:folder)
+    case Progress.find_next(source, sandbox) do
       :workshop_over ->
         Mix.shell.info Info.get(Workshop.Meta, :debriefing)
 

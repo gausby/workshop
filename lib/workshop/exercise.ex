@@ -138,4 +138,10 @@ defmodule Workshop.Exercise do
         {:error, "input was not a valid exercise folder name"}
     end
   end
+
+  def passes?(exercise) do
+    exercise_state = Workshop.State.get(:exercises)
+    identifier = load(exercise) |> get_identifier
+    Keyword.get(exercise_state[identifier], :status, nil) == :completed
+  end
 end

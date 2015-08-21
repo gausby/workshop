@@ -22,21 +22,30 @@ defmodule Mix.Tasks.Workshop do
     """, opts
   end
 
+  @status %{
+    not_started: "",
+    in_progress: "- IN PROGRESS",
+    completed: "- COMPLETED"
+  }
+
   defp list_exercises do
     current_exercise = Workshop.Session.get(:current_exercise)
+    progress = Workshop.State.get(:exercises, [])
 
     Exercises.list!
     |> Enum.with_index
     |> Enum.map(fn {exercise, index} ->
-         number = index + 1
          module = Exercise.load(exercise)
-         title = Exercise.get(module, :title)
-
-         if Path.basename(exercise) == current_exercise do
-           "  #{number}. *#{title}*\n"
-         else
-           "  #{number}. #{title}\n"
-         end
+         %{number: index + 1,
+           title: Exercise.get(module, :title),
+           status: progress[Exercise.get_identifier(module)][:status],
+           current: Path.basename(exercise) == current_exercise}
+       end)
+    |> Enum.map(fn
+         %{current: true} = e ->
+           "  #{e.number}. *#{e.title} #{@status[e.status]}*\n"
+         e ->
+           "  #{e.number}. #{e.title} #{@status[e.status]}\n"
        end)
   end
 end
