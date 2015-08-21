@@ -4,13 +4,19 @@ defmodule Workshop.Exercises do
   @doc """
   List the exercises in the current workshop
   """
-  @spec list!() :: [String.t]
-  def list! do
-    Workshop.Session.get(:exercises_folder)
+  @spec list!(String.t) :: [String.t]
+  def list!(folder) do
+    folder
     |> Path.join("*/exercise.exs")
     |> Path.wildcard
     |> Enum.map(&(Path.rootname(&1, "exercise.exs")))
     |> Enum.map(&Path.basename/1)
+  end
+
+  @doc false
+  @spec list!() :: [String.t]
+  def list! do
+    list! Workshop.Session.get(:exercises_folder)
   end
 
   @doc """
@@ -20,6 +26,13 @@ defmodule Workshop.Exercises do
   @spec list_by_weight!() :: [{Integer, String.t}]
   def list_by_weight! do
     list!
+    |> Enum.map(&Exercise.split_weight_and_name/1)
+    |> Enum.sort
+  end
+
+  @spec list_by_weight!(String.t) :: [{Integer, String.t}]
+  def list_by_weight!(folder) do
+    list!(folder)
     |> Enum.map(&Exercise.split_weight_and_name/1)
     |> Enum.sort
   end
