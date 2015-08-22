@@ -84,6 +84,13 @@ defmodule Mix.Tasks.New.Workshop do
     # is running.
     @version "0.0.1"
 
+    # An optional url to the website of the workshop. If the website is a Git repo
+    # on GitHub the help page will point to the GitHub issues page when the user
+    # types `mix workshop.help`
+    #
+    # ie: `https://github.com/foo/bar` becomes `https://github.com/foo/bar/issues`
+    @home nil
+
     # An optional short description of the workshop. Will get shown at places
     # where the long description would not fit, such as the `mix workshop` screen.
     # Set this to `false` if you want to suppress the missing shortdesc warning.
