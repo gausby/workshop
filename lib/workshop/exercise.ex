@@ -139,6 +139,7 @@ defmodule Workshop.Exercise do
     end
   end
 
+  @spec passes?(String.t) :: boolean
   def passes?(exercise) do
     exercise_state = Workshop.State.get(:exercises)
     identifier = load(exercise) |> get_identifier
