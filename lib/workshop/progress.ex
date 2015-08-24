@@ -10,18 +10,17 @@ defmodule Workshop.Progress do
   """
   @spec find_next(String.t, String.t) :: {:next, String.t} | :workshop_over
   def find_next(source_folder, sandbox_folder) do
-    in_source = source_folder |> File.ls!
-    in_sandbox = sandbox_folder |> File.ls!
+    in_source = source_folder |> File.ls! |> Enum.reject(&(String.starts_with?(&1, ".")))
+    in_sandbox = sandbox_folder |> File.ls! |> Enum.reject(&(String.starts_with?(&1, ".")))
     {checked_out, remaining} = find_checked_out_and_non_checked_out(in_source, in_sandbox)
 
-    name_map = create_name_map Exercises.list!
     case find_first_non_passing_exercise(checked_out) do
       {_weight, next} ->
-        {:next, name_map[next]}
+        {:next, next}
       nil ->
         case remaining do
           [{_weight, next}|_] ->
-            {:next, name_map[next]}
+            {:next, next}
           [] ->
             :workshop_over
         end
@@ -29,9 +28,8 @@ defmodule Workshop.Progress do
   end
 
   defp find_first_non_passing_exercise(exercises) do
-    name_map = create_name_map(Exercises.list!)
     exercises
-    |> Stream.drop_while(&(Exercise.passes?(name_map[elem(&1, 1)])))
+    |> Stream.drop_while(&(Exercise.passes?(elem(&1, 1))))
     |> Stream.take(1) |> Enum.to_list |> List.first
   end
 
@@ -42,33 +40,35 @@ defmodule Workshop.Progress do
   @spec find_checked_out_and_non_checked_out([String.t], [String.t]) :: {[{Integer, String.t}], [{Integer, String.t}]}
   def find_checked_out_and_non_checked_out(source, sandbox_folder) do
     in_source = create_exercise_set(source)
-    in_sandbox = create_exercise_set(sandbox_folder)
+
+    in_sandbox = sandbox_folder
+                 |> Enum.reject(&(String.starts_with?(&1, ".")))
+                 |> Enum.filter(&(Regex.match?(~r/^\d+_[a-z][\w_]*$/, &1)))
+                 |> Enum.map(&strip_number_prefix/1)
+                 |> create_exercise_set
                  |> HashSet.intersection(in_source) # skip folders not in source
 
-    not_checked_out = HashSet.difference(in_source, in_sandbox)
-                      |> HashSet.to_list
-                      |> Exercises.get_weights_from_name(source)
-                      |> Enum.sort
     checked_out = HashSet.intersection(in_source, in_sandbox)
                   |> HashSet.to_list
                   |> Exercises.get_weights_from_name(source)
                   |> Enum.sort
 
+    not_checked_out = HashSet.difference(in_source, in_sandbox)
+                      |> HashSet.to_list
+                      |> Exercises.get_weights_from_name(source)
+                      |> Enum.sort
+
     {checked_out, not_checked_out}
+  end
+
+  defp strip_number_prefix(item) when is_binary item do
+    [_weight, name] = String.split(item, "_", parts: 2)
+    name
   end
 
   defp create_exercise_set(exercises) when is_list exercises do
     exercises
-    |> Enum.map(&Exercise.split_weight_and_name/1)
-    |> Enum.reject(&(elem(&1, 0) == :error))
-    |> Enum.map(&(elem(&1, 1)))
+    |> Enum.filter(&Exercise.valid_name?/1)
     |> Enum.into(HashSet.new)
-  end
-
-  def create_name_map(exercises) do
-    exercises |> Enum.into(%{}, fn weight_and_name ->
-      {_weight, name} = Exercise.split_weight_and_name(weight_and_name)
-      {name, weight_and_name}
-    end)
   end
 end

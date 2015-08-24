@@ -32,9 +32,9 @@ defmodule Mix.Tasks.Workshop do
     current_exercise = Workshop.Session.get(:current_exercise)
     progress = Workshop.State.get(:exercises, [])
 
-    Exercises.list!
+    Exercises.list_by_weight!
     |> Enum.with_index
-    |> Enum.map(fn {exercise, index} ->
+    |> Enum.map(fn {{_weight, exercise}, index} ->
          module = Exercise.load(exercise)
          %{number: index + 1,
            title: Exercise.get(module, :title),

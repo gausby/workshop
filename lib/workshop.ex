@@ -58,8 +58,9 @@ defmodule Workshop do
     candidate = Path.join(folder, ".workshop")
     candidate_exercise_folder = Path.join(candidate, "exercises")
     if File.exists?(candidate) and File.exists?(candidate_exercise_folder) do
-      if exercise_exists? backtrack, candidate_exercise_folder do
-        {:ok, folder, backtrack}
+      possible_exercise_folder = strip_number_prefix(backtrack)
+      if exercise_exists? possible_exercise_folder, candidate_exercise_folder do
+        {:ok, folder, possible_exercise_folder}
       else
         {:ok, folder}
       end
@@ -75,16 +76,19 @@ defmodule Workshop do
 
   defp exercise_exists?(nil, _), do: false
   defp exercise_exists?(exercise_name, exercise_folder) do
-    case Workshop.Exercise.split_weight_and_name(exercise_name) do
-      {_weight, name} ->
-        Path.wildcard("#{exercise_folder}/*#{name}/exercise.exs")
-        # get the name of the dir
-        |> Enum.map(&Path.dirname/1) |> Enum.map(&Path.basename/1)
-        |> Enum.map(&Workshop.Exercise.split_weight_and_name/1)
-        |> Enum.map(&(elem(&1, 1)))
-        |> Enum.any?(&(&1 == name))
-      _ ->
-        false
+    Path.wildcard("#{exercise_folder}/*#{exercise_name}/exercise.exs")
+    |> Enum.map(&Path.dirname/1) |> Enum.map(&Path.basename/1) # get the name of the dir
+    |> Enum.any?(&(&1 == exercise_name))
+  end
+
+  @valid_exercise_name_with_number_prefix ~r/^\d+_[a-z][\w_]*$/
+  def strip_number_prefix(nil), do: nil
+  def strip_number_prefix(subject) when is_binary subject do
+    if Regex.match?(@valid_exercise_name_with_number_prefix, subject) do
+      [_weight, name] = String.split(subject, "_", parts: 2)
+      name
+    else
+      subject
     end
   end
 end

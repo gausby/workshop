@@ -26,23 +26,24 @@ defmodule Workshop.Exercises do
   @spec list_by_weight!() :: [{Integer, String.t}]
   def list_by_weight! do
     list!
-    |> Enum.map(&Exercise.split_weight_and_name/1)
+    |> Enum.map(&Exercise.weight_and_name/1)
     |> Enum.sort
   end
 
   @spec list_by_weight!(String.t) :: [{Integer, String.t}]
   def list_by_weight!(folder) do
     list!(folder)
-    |> Enum.map(&Exercise.split_weight_and_name/1)
+    |> Enum.map(&Exercise.weight_and_name/1)
     |> Enum.sort
   end
 
   @doc """
   Will convert `name` to `weight_name` given a list of names and exercises
   """
-  @spec get_weights_from_name([String.t], [String.t]) :: {Integer, String.t}
+  @spec get_weights_from_name([String.t], [String.t]) :: [{Integer, String.t}]
+  def get_weights_from_name([], _), do: []
   def get_weights_from_name(exercises, exercise_list) do
-    weights = Enum.map(exercise_list, &Exercise.split_weight_and_name/1)
+    weights = Enum.map(exercise_list, &Exercise.weight_and_name/1)
               |> Enum.into(%{}, fn {weight, name} -> {name, weight} end)
 
     Enum.map(exercises, fn exercise ->

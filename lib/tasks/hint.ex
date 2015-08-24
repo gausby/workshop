@@ -19,7 +19,7 @@ defmodule Mix.Tasks.Workshop.Hint do
       exercise_identifier = Exercise.get_identifier(exercise_module)
       hints_given = Workshop.State.get(:exercises)[exercise_identifier][:hint]
       displayed_hints = hints |> Enum.take(hints_given) |> Enum.map_reduce(1, fn hint, acc ->
-        {"#{acc}. #{hint}", acc + 1}
+        {"#{acc}. #{String.rstrip(hint)}\n", acc + 1}
       end) |> elem(0)
 
       help = cond do
