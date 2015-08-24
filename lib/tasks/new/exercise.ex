@@ -15,9 +15,12 @@ defmodule Mix.Tasks.New.Exercise do
       mix new.workshop NAME
 
   The path will be named after the given NAME. Given `my_exercise` it will
-  result in a workshop named *My Exercise*. The generated files will be
-  stored in folder prefixed with a number, like "010", incrementing by 10
-  for every exercise that is created.
+  result in a workshop named *My Exercise*.
+
+  The exercises will be ordered by a weight set as a module attribute in the
+  generated *name/exercise.exs* file. It will increment by 1000 for every new
+  exercise, which should give ample slots to move exercises around after
+  they have been created, if the exercise order should change.
   """
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do
@@ -42,19 +45,20 @@ defmodule Mix.Tasks.New.Exercise do
         end
         mod = camelize(name)
         title = snake_case_to_headline(name)
-        exercise_folder = Path.expand("#{get_next_exercise_weight}_#{name}", path)
+        weight = get_next_exercise_weight
+        exercise_folder = Path.expand("#{name}", path)
 
         case File.mkdir_p(exercise_folder) do
           :ok ->
             File.cd!(exercise_folder, fn ->
-              do_generate_exercise(path, title, mod, opts)
+              do_generate_exercise(path, title, mod, weight, opts)
               Mix.shell.info """
               The new exercise has been created in:
 
                   #{exercise_folder}
 
               If you want to change the precedence of this exercise you can simply
-              move the folder and change the assigned number.
+              change the assigned @weight in the created exercise.exs-file.
               """
             end)
         end
@@ -62,16 +66,15 @@ defmodule Mix.Tasks.New.Exercise do
   end
 
   # calculate the next weight value for the next exercise
-  @weight_increment 10
+  @weight_increment 1000
   defp get_next_exercise_weight do
-    current = case Enum.reverse(Exercises.list_by_weight!) do
+    case Enum.reverse(Exercises.list_by_weight!) do
       [{weight, _} | _] ->
-        weight
+        weight + @weight_increment
 
       [] ->
-        0
+        @weight_increment
     end
-    current + @weight_increment |> Integer.to_string |> String.rjust(3, ?0)
   end
 
   defp snake_case_to_headline(name) do
@@ -81,8 +84,8 @@ defmodule Mix.Tasks.New.Exercise do
     |> Enum.join(" ")
   end
 
-  defp do_generate_exercise(name, title, mod, _opts) do
-    assigns = [name: name, title: title, module: mod]
+  defp do_generate_exercise(name, title, mod, weight, _opts) do
+    assigns = [name: name, title: title, module: mod, weight: weight]
 
     create_file "exercise.exs", exercise_template(assigns)
     create_directory "files"
@@ -96,6 +99,7 @@ defmodule Mix.Tasks.New.Exercise do
     use Workshop.Exercise
 
     @title "<%= @title %>"
+    @weight <%= @weight %>
 
     @description \"""
     @todo, write this exercise
