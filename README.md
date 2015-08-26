@@ -5,15 +5,15 @@ A couple of mix tasks for building workshops and running them in the terminal.
 Commands
 --------
 ### `mix workshop`
-List exercises in the current workshop and the status of the exercises (passed, not completed, etc)
+List exercises in the current workshop and the status of the exercises (in progress, completed, etc).
 
 ### `mix workshop.next`
 Proceed the workshop to the next exercise.
 
-If the workshop has not been started yet (no state file has been created), the system integrity test and workshop integrity test will get executed; The workshop will not start before both pass.
+If the workshop has not been started yet (no state file has been created), the system- and workshop integrity tests will get executed; The workshop will not start before both pass.
 
 ### `mix workshop.info`
-Display info about the current exercise, or info about the workshop if it hasn't been started yet.
+Display info about the current exercise if the command is executed from within an exercise. Alternatively it will display information about the workshop itself if not executed from an exercise folder.
 
 ### `mix workshop.hint`
 Display a hint about the current exercise. Like info, but with a bit more help for finishing the exercise.
@@ -21,7 +21,9 @@ Display a hint about the current exercise. Like info, but with a bit more help f
 If the exercise has more than one hint it will show one more hint than the previous time the command was run. This allows the hints to reveal a bit more of the solution so that the user can explore on their own, and run the hint command if the user gets stuck.
 
 ### `mix workshop.check`
-Not implemented. Should run the acceptance test against the users solution for the current exercise.
+Should run the acceptance test against the users solution for the current exercise.
+
+For now it will just set the current exercise status to *completed*, making the `mix workshop.next` command progress to the next exercise.
 
 ### `mix workshop.doctor`
 Perform a system integrity check. It will fail the test if prerequisites, such as having specific software required for the workshop installed.
@@ -29,7 +31,7 @@ Perform a system integrity check. It will fail the test if prerequisites, such a
 I.e. a workshop that require a specific database to be installed could have a test that fails if the user does not have that database installed.
 
 ### `mix workshop.help`
-Display a link to the Github issues where the current workshop is hosted. Users could go here and ask questions if it is an online workshop.
+Describe the workshop command to the user, and if a *home* link is set for the workshop it will get displayed on this screen.
 
 Workshop Generator Tasks
 ------------------------
