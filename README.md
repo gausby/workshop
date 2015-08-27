@@ -30,6 +30,9 @@ Perform a system integrity check. It will fail the test if prerequisites, such a
 
 I.e. a workshop that require a specific database to be installed could have a test that fails if the user does not have that database installed.
 
+### `mix workshop.version`
+Will print the version number of the current exercise. This is mostly for troubleshooting reasons, and to make sure every student at a seminar is running the same version of the workshop.
+
 ### `mix workshop.help`
 Describe the workshop command to the user, and if a *home* link is set for the workshop it will get displayed on this screen.
 
