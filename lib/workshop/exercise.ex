@@ -33,10 +33,11 @@ defmodule Workshop.Exercise do
       {^key, exercise_module} ->
         exercise_module
       _ ->
-        [{exercise_module,_}|_] = folder
-                                  |> Path.expand(Workshop.Session.get(:exercises_folder))
-                                  |> Path.join("exercise.exs")
-                                  |> Code.require_file
+        [{exercise_module,_}|_] =
+          folder
+          |> Path.expand(Workshop.Session.get(:exercises_folder))
+          |> Path.join("exercise.exs")
+          |> Code.require_file
 
         Workshop.Session.put :exercises, [{key, exercise_module} | loaded]
         exercise_module

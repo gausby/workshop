@@ -24,8 +24,10 @@ defmodule Workshop.Doctor do
   # This will fetch the prerequisite tests defined in the workshop in *prerequisite.exs*
   @spec get_workshop_prerequisite_tests :: [test_function]
   defp get_workshop_prerequisite_tests do
-    path = "prerequisite.exs"
-           |> Path.expand(Workshop.Session.get(:data_folder))
+    path =
+      "prerequisite.exs"
+      |> Path.expand(Workshop.Session.get(:data_folder))
+
     if File.exists? path do
       Code.require_file(path)
       apply(Workshop.Prerequisite, :run, [])

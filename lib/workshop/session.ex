@@ -11,10 +11,13 @@ defmodule Workshop.Session do
   Initialize the session agent.
   """
   def init(workshop_folder, current_exercise) do
-    initial_state = [folder: workshop_folder,
-                     data_folder: workshop_folder |> Path.join(".workshop"),
-                     exercises_folder: workshop_folder |> Path.join(".workshop") |> Path.join("exercises"),
-                     current_exercise: current_exercise]
+    initial_state = [
+      folder: workshop_folder,
+      data_folder: workshop_folder |> Path.join(".workshop"),
+      exercises_folder: workshop_folder |> Path.join(".workshop") |> Path.join("exercises"),
+      current_exercise: current_exercise
+    ]
+
     initial_state
   end
 

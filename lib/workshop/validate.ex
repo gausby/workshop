@@ -94,8 +94,9 @@ defmodule Workshop.Validate do
   end
 
   defp should_have_unique_weights_for_exercises do
-    exercises = Exercises.list_by_weight!
-                |> Enum.map(&elem(&1, 0))
+    exercises =
+      Exercises.list_by_weight!
+      |> Enum.map(&elem(&1, 0))
 
     cond do
       length(exercises) != length(Enum.uniq(exercises)) ->
@@ -106,8 +107,9 @@ defmodule Workshop.Validate do
   end
 
   defp should_have_unique_titles_for_exercises do
-    exercises = Exercises.list_by_weight!
-                |> Enum.map(&elem(&1, 1))
+    exercises =
+      Exercises.list_by_weight!
+      |> Enum.map(&elem(&1, 1))
 
     cond do
       length(exercises) != length(Enum.uniq(exercises)) ->
