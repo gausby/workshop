@@ -28,7 +28,7 @@ defmodule Workshop.Progress do
   end
 
   defp hidden_file(file),
-    do: String.starts_with? file, "."
+    do: String.starts_with?(file, ".")
 
   defp find_first_non_passing_exercise(exercises) do
     exercises
