@@ -72,7 +72,7 @@ defmodule Workshop.Exercise do
   end
 
   @doc """
-  Get the name the given exercise would have in the sandbox.
+  Get the sandbox name of the given exercise.
   """
   @spec exercise_sandbox_name(String.t, [{Integer, String.t}]) :: String.t
   def exercise_sandbox_name(needle, exercises) do
@@ -87,10 +87,21 @@ defmodule Workshop.Exercise do
     "#{String.rjust(to_string(exercise_index + 1), len, ?0)}_#{needle}"
   end
 
+  @doc """
+  Get the sandbox name of the given exercise. Use the contents of the source
+  exercise folder to determine the given weight.
+  """
+  @spec exercise_sandbox_name(String.t) :: String.t
+  def exercise_sandbox_name(exercise) do
+    exercise_sandbox_name(exercise, Workshop.Exercises.list_by_weight!)
+  end
+
   @spec copy_files_to_sandbox(String.t) :: :ok | {:error, String.t}
   def copy_files_to_sandbox(exercise_folder) do
-    destination = exercise_sandbox_name(exercise_folder, Workshop.Exercises.list_by_weight!)
-                  |> Path.expand(Workshop.Session.get(:folder))
+    destination =
+      exercise_sandbox_name(exercise_folder)
+      |> Path.expand(Workshop.Session.get(:folder))
+
     case create_directory(destination) do
       :ok ->
         source = files_folder(exercise_folder)
