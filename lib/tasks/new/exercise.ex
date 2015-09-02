@@ -91,7 +91,8 @@ defmodule Mix.Tasks.New.Exercise do
     create_directory "files"
     create_directory "solution"
     create_directory "test"
-    create_file "test/test_helper.exs", ""
+    create_file "test/test_helper.exs", test_helper_template(assigns)
+    create_file "test/check.exs", check_template(assigns)
   end
 
   embed_template :exercise, """
@@ -118,6 +119,42 @@ defmodule Mix.Tasks.New.Exercise do
       @todo, write a couple of hints for the solving this exercise
       \"""
     ]
+  end
+  """
+
+  embed_template :test_helper, """
+  defmodule Workshop.Exercise.<%= @module %>Check.Helper do
+    def exec(solution) do
+      # this file should know how to load the given exercise solution
+      solution_dir =
+        solution
+        |> Workshop.Exercise.exercise_sandbox_name
+        |> Path.expand(Workshop.Session.get(:folder))
+
+      # locate and load the users solution
+      script = "exercise.exs" |> Path.expand(solution_dir)
+      Code.require_file(script)
+
+      # load and run the solution checker
+      Code.require_file("check.exs", __DIR__)
+
+      Workshop.Exercise.<%= @module %>Check.run()
+    end
+  end
+  """
+
+  embed_template :check, """
+  defmodule Workshop.Exercise.<%= @module %>Check do
+    use Workshop.SolutionCheck
+
+    verify "verify something" do
+      # return value can be :ok, {:warning, message}, or {:error, message}
+      :ok
+    end
+
+    verify "verify something else" do
+      :ok
+    end
   end
   """
 end
