@@ -188,4 +188,15 @@ defmodule Workshop.Exercise do
       false
     end
   end
+
+  @spec set_status(String.t, Atom) :: :ok
+  def set_status(exercise, new_status) do
+    identifier = load(exercise) |> get_identifier
+    exercises_state = Workshop.State.get(:exercises, [])
+    current_exercise_state = exercises_state[identifier] || []
+    new_state = Keyword.put(current_exercise_state, :status, new_status)
+
+    Workshop.State.update(:exercises, Keyword.put(exercises_state, identifier, new_state))
+    Workshop.State.persist!
+  end
 end
