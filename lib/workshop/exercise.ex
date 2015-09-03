@@ -64,9 +64,20 @@ defmodule Workshop.Exercise do
     |> Enum.any?(&(elem(&1, 1) == name))
   end
 
+  @doc """
+  Get the location of the exercise files folder or a given exercise.
+
+  These are the files that a copied into the exercise sandbox when the user
+  progress to the given exercise.
+  """
   @spec files_folder(String.t) :: String.t
   def files_folder(exercise_folder) do
-    Workshop.Session.get(:exercises_folder)
+    files_folder(exercise_folder, Workshop.Session.get(:exercises_folder))
+  end
+
+  @spec files_folder(String.t, String.t) :: String.t
+  def files_folder(exercise_folder, folder) do
+    folder
     |> Path.join(exercise_folder)
     |> Path.join("files")
   end
