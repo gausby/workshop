@@ -43,7 +43,6 @@ defmodule Workshop.Progress do
   @spec find_checked_out_and_non_checked_out([String.t], [String.t]) :: {[{Integer, String.t}], [{Integer, String.t}]}
   def find_checked_out_and_non_checked_out(source, sandbox_folder) do
     in_source = create_exercise_set(source)
-
     in_sandbox =
       sandbox_folder
       |> Enum.filter(&(Regex.match?(~r/^\d+_[a-z][\w_]*$/, &1)))
@@ -55,13 +54,11 @@ defmodule Workshop.Progress do
       HashSet.intersection(in_source, in_sandbox)
       |> HashSet.to_list
       |> Exercises.get_weights_from_name(source)
-      |> Enum.sort
 
     not_checked_out =
       HashSet.difference(in_source, in_sandbox)
       |> HashSet.to_list
       |> Exercises.get_weights_from_name(source)
-      |> Enum.sort
 
     {checked_out, not_checked_out}
   end

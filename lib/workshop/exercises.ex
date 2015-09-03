@@ -44,11 +44,12 @@ defmodule Workshop.Exercises do
   def get_weights_from_name([], _), do: []
   def get_weights_from_name(exercises, exercise_list) do
     weights =
-      Enum.map(exercise_list, &Exercise.weight_and_name/1)
+      exercise_list
+      |> Enum.map(&Exercise.weight_and_name/1)
       |> Enum.into(%{}, fn {weight, name} -> {name, weight} end)
 
-    Enum.map(exercises, fn exercise ->
-      {Map.get(weights, exercise), exercise}
-    end)
+    exercises
+    |> Enum.map(fn exercise -> {Map.get(weights, exercise), exercise} end)
+    |> Enum.sort
   end
 end
