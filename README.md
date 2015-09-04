@@ -115,3 +115,8 @@ The solution folder should contain an implementation that solves the exercise. T
 Will check if the workshop is valid. This can aid in the development of workshops.
 
 Notice: this will also get run when the end user start the workshop. This is done to help preventing the user getting stuck in a broken workshop; if the workshop is not valid it will not start.
+
+
+License
+-------
+See the LICENSE file included in the project. If it is not please contact the creator of the project.
