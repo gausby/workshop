@@ -88,6 +88,7 @@ $ mix new.exercise my_first_exercise
 * creating files/
 * creating solution/
 * creating test/
+* creating test/check.exs
 * creating test/test_helper.exs
 [omitted output]
 ```
@@ -102,6 +103,8 @@ This folder contains files that will get copied into the workshop sandbox folder
 
 #### test/
 The test folder contains scripts used to verify the users solution. Think of it as unit tests that the user should not touch.
+
+The *test_helper.exs*-file should know how to bootstrap the solution, and the *check.exs*-file should contain verification functions that test the users exercise solution.
 
 #### solution/
 The solution folder should contain an implementation that solves the exercise. This will be run when the exercise is verified, so it should pass. This will also be used so that the user can compare solutions when their exercise has been handed in.
