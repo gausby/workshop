@@ -93,10 +93,12 @@ $ mix new.exercise my_first_exercise
 [omitted output]
 ```
 
-These files will get created in *my_workshop/.workshop/exercises/010_my_first_exercise*. The "010" part of the destination folder is an auto generated, auto incremental, number based on the number of exercise with the largest assigned number plus 10. This is done so a new exercise can get moved between two already created exercises by changing its "weight" to a number between the two tasks.
+These files will get created in *my_workshop/.workshop/exercises/my_first_exercise*.
 
 #### exercise.exs
 Contain meta data about a given workshop, such as its title, a description (and assignment), and a list of hints that will help the user complete the assignment.
+
+This file also contain a *weight*-value that determine the order the exercises are presented—an exercise with a low value will come before an exercise with a high value.
 
 #### files/
 This folder contains files that will get copied into the workshop sandbox folder (the root of the workshop) when the exercise gets activated. The user will work with these files to solve the assignment.
