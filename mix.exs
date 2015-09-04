@@ -1,32 +1,44 @@
 defmodule Workshop.Mixfile do
   use Mix.Project
 
+  @version File.read!("VERSION") |> String.strip
+  defp description do
+    """
+    Mix tasks for creating and running interactive workshops for teaching
+    people how to program in Elixir, and other things.
+    """
+  end
+
   def project do
     [app: :workshop,
-     version: "0.0.1",
+     version: @version,
+     description: description,
+     package: package,
      elixir: "~> 1.0",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type `mix help compile.app` for more information
   def application do
     [applications: [:logger]]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type `mix help deps` for more examples and options
-  defp deps do
-    []
+  defp package do
+    %{
+      licenses: ["Apache v2.0"],
+      contributors: [
+        "Martin Gausby"
+      ],
+      links: %{
+        "GitHub" => "https://github.com/gausby/workshop",
+        "Bugs" => "https://github.com/gausby/workshop/issues"
+      },
+      files: ~w(lib config mix.exs LICENSE VERSION README*)
+    }
   end
+
+  # This project should not have any third-party dependencies as it should
+  # be able to build to, and be distributed as, a mix archive.
+  defp deps, do: []
 end
