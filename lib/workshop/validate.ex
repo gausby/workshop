@@ -1,28 +1,10 @@
 defmodule Workshop.Validate do
-  alias Workshop.ValidationResult, as: Result
+  use Workshop.SolutionCheck
 
   alias Workshop.Exercises
   alias Workshop.Exercise
 
-  @spec run() :: Result.t
-  def run do
-    tests = [
-      &should_have_a_title/0,
-      &should_have_a_version/0,
-      &should_have_a_description/0,
-      &could_have_a_short_description/0,
-      &should_have_an_introduction/0,
-      &should_have_a_debriefing/0,
-      &should_have_at_least_one_exercise/0,
-      &should_have_unique_weights_for_exercises/0,
-      &should_have_unique_titles_for_exercises/0,
-      &should_have_all_valid_exercises/0
-    ]
-
-    for test <- tests, into: %Result{}, do: apply(test, [])
-  end
-
-  defp should_have_a_title do
+  verify "Should have a title" do
     cond do
       Workshop.Info.get(Workshop.Meta, :title) == nil ->
         {:error, "The workshop should have a title"}
@@ -31,7 +13,7 @@ defmodule Workshop.Validate do
     end
   end
 
-  defp should_have_a_version do
+  verify "Should have a version" do
     cond do
       Workshop.Info.get(Workshop.Meta, :version) == nil ->
         {:error, "The workshop should have a version"}
@@ -40,7 +22,7 @@ defmodule Workshop.Validate do
     end
   end
 
-  defp should_have_a_description do
+  verify "Should have a description" do
     cond do
       Workshop.Info.get(Workshop.Meta, :description) == nil ->
         {:error, "The workshop should have a description"}
@@ -49,7 +31,7 @@ defmodule Workshop.Validate do
     end
   end
 
-  defp could_have_a_short_description do
+  verify "Could have a short description" do
     shortdesc = Workshop.Info.get(Workshop.Meta, :shortdesc)
     cond do
       shortdesc == false ->
@@ -66,7 +48,7 @@ defmodule Workshop.Validate do
     end
   end
 
-  defp should_have_an_introduction do
+  verify "Should have an introduction" do
     cond do
       Workshop.Info.get(Workshop.Meta, :introduction) == nil ->
         {:error, "The workshop should have an introduction"}
@@ -75,7 +57,7 @@ defmodule Workshop.Validate do
     end
   end
 
-  defp should_have_a_debriefing do
+  verify "Should have a debriefing" do
     cond do
       Workshop.Info.get(Workshop.Meta, :debriefing) == nil ->
         {:error, "The workshop should have a debriefing"}
@@ -84,7 +66,7 @@ defmodule Workshop.Validate do
     end
   end
 
-  defp should_have_at_least_one_exercise do
+  verify "Should have at least one exercise" do
     cond do
       length(Exercises.list!) <= 0 ->
         {:error, "The workshop should have at least one exercise"}
@@ -93,7 +75,7 @@ defmodule Workshop.Validate do
     end
   end
 
-  defp should_have_unique_weights_for_exercises do
+  verify "Should have unique weights for exercises" do
     exercises =
       Exercises.list_by_weight!
       |> Enum.map(&elem(&1, 0))
@@ -106,7 +88,7 @@ defmodule Workshop.Validate do
     end
   end
 
-  defp should_have_unique_titles_for_exercises do
+  verify "Should have unique titles for exercises" do
     exercises =
       Exercises.list_by_weight!
       |> Enum.map(&elem(&1, 1))
@@ -119,7 +101,7 @@ defmodule Workshop.Validate do
     end
   end
 
-  defp should_have_all_valid_exercises do
+  verify "Should have all valid exercises" do
     Exercises.list!
     |> Enum.map(&Exercise.validate/1)
   end
