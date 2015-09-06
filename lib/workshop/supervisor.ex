@@ -5,7 +5,7 @@ defmodule Workshop.Supervisor do
     Supervisor.start_link(__MODULE__, opts)
   end
 
-  def init(opts) do
+  def init(_opts) do
     case Workshop.locate_root do
       {:ok, root} ->
         workshop_folder = root

@@ -1,6 +1,4 @@
 defmodule Workshop.Info do
-  import Mix.Generator
-
   @doc false
   defmacro __using__(_opts) do
     quote do
