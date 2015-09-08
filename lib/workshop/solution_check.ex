@@ -10,14 +10,31 @@ defmodule Workshop.SolutionCheck do
   defmacro __before_compile__(_env) do
     quote do
       def run, do: Workshop.SolutionCheck.Test.run(@checks, __MODULE__)
+
+      def run(context), do: Workshop.SolutionCheck.Test.run(@checks, __MODULE__, context)
     end
   end
 
-  defmacro verify(description, do: verify_block) do
-    verify_func = String.to_atom(description)
-    quote do
-      @checks {unquote(verify_func), unquote(description)}
-      def unquote(verify_func)(), do: unquote(verify_block)
+  defmacro verify(description, var \\ quote(do: _), contents) do
+    contents =
+      case contents do
+        [do: block] ->
+          quote do
+            _ = unquote(block)
+          end
+        _ ->
+          quote do
+            _ = try(unquote(contents))
+          end
+      end
+
+    var = Macro.escape(var)
+    contents = Macro.escape(contents, unquote: true)
+
+    quote bind_quoted: binding do
+      verify_func = :"verify #{description}"
+      Module.put_attribute(__MODULE__, :checks, verify_func)
+      def unquote(verify_func)(unquote(var)), do: unquote(contents)
     end
   end
 end
@@ -25,9 +42,9 @@ end
 defmodule Workshop.SolutionCheck.Test do
   alias Workshop.ValidationResult, as: Result
 
-  def run(checks, module) do
-    for {func, _description} <- checks, into: %Result{} do
-      apply(module, func, [])
+  def run(checks, module, context \\ nil) do
+    for func <- Enum.reverse(checks), into: %Result{} do
+      apply(module, func, [context])
     end
   end
 end
