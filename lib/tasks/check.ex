@@ -3,7 +3,7 @@ defmodule Mix.Tasks.Workshop.Check do
 
   alias Workshop.Exercise
   alias Workshop.Session
-  alias Workshop.ValidationResult, as: Result
+  alias Workshop.Validator.Result
 
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do

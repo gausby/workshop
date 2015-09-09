@@ -1,4 +1,4 @@
-defmodule Workshop.SolutionCheck do
+defmodule Workshop.Validator do
   defmacro __using__(_opts) do
     quote do
       import unquote(__MODULE__)
@@ -9,9 +9,9 @@ defmodule Workshop.SolutionCheck do
 
   defmacro __before_compile__(_env) do
     quote do
-      def run, do: Workshop.SolutionCheck.Test.run(@checks, __MODULE__)
+      def run, do: Workshop.Validator.Runner.run(@checks, __MODULE__)
 
-      def run(context), do: Workshop.SolutionCheck.Test.run(@checks, __MODULE__, context)
+      def run(context), do: Workshop.Validator.Runner.run(@checks, __MODULE__, context)
     end
   end
 
@@ -35,16 +35,6 @@ defmodule Workshop.SolutionCheck do
       verify_func = :"verify #{description}"
       Module.put_attribute(__MODULE__, :checks, verify_func)
       def unquote(verify_func)(unquote(var)), do: unquote(contents)
-    end
-  end
-end
-
-defmodule Workshop.SolutionCheck.Test do
-  alias Workshop.ValidationResult, as: Result
-
-  def run(checks, module, context \\ nil) do
-    for func <- Enum.reverse(checks), into: %Result{} do
-      apply(module, func, [context])
     end
   end
 end

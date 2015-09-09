@@ -1,5 +1,5 @@
 defmodule Workshop.Validate do
-  use Workshop.SolutionCheck
+  use Workshop.Validator
 
   alias Workshop.Exercises
   alias Workshop.Exercise

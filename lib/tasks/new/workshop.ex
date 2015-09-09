@@ -124,7 +124,7 @@ defmodule Mix.Tasks.New.Workshop do
 
   embed_template :prerequisite, """
   defmodule Workshop.Prerequisite do
-    use Workshop.SolutionCheck
+    use Workshop.Validator
 
     # just remove and replace this example check
     verify "Should check the truth" do

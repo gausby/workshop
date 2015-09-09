@@ -1,4 +1,4 @@
-defmodule Workshop.ValidationResult do
+defmodule Workshop.Validator.Result do
   defstruct errors: [], warnings: [], runs: 0, passed: 0
 
   @doc false
@@ -40,6 +40,6 @@ defmodule Workshop.ValidationResult do
   end
 end
 
-defimpl Collectable, for: Workshop.ValidationResult do
-  defdelegate into(original), to: Workshop.ValidationResult
+defimpl Collectable, for: Workshop.Validator.Result do
+  defdelegate into(original), to: Workshop.Validator.Result
 end

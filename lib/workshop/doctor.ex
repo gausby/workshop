@@ -1,5 +1,5 @@
 defmodule Workshop.Doctor do
-  use Workshop.SolutionCheck
+  use Workshop.Validator
 
   verify "System should have the same major minor version as the creation script" do
     # todo, the workshop should save the workshop version number it was created with

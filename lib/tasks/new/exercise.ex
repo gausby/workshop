@@ -145,7 +145,7 @@ defmodule Mix.Tasks.New.Exercise do
 
   embed_template :check, """
   defmodule Workshop.Exercise.<%= @module %>Check do
-    use Workshop.SolutionCheck
+    use Workshop.Validator
 
     verify "verify something" do
       # return value can be :ok, {:warning, message}, or {:error, message}

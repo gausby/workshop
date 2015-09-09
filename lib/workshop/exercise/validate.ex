@@ -1,5 +1,5 @@
 defmodule Workshop.Exercise.Validate do
-  use Workshop.SolutionCheck
+  use Workshop.Validator
 
   verify "Should have a title", exercise do
     title = Workshop.Exercise.get(exercise, :title)

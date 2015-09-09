@@ -1,6 +1,6 @@
 defmodule Mix.Tasks.Workshop.Validate do
   use Mix.Task
-  alias Workshop.ValidationResult, as: Result
+  alias Workshop.Validator.Result
 
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do

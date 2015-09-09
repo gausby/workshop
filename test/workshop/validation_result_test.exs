@@ -1,7 +1,7 @@
-defmodule Workshop.ValidationResultTest do
+defmodule Workshop.Validator.ResultTest do
   use ExUnit.Case
 
-  alias Workshop.ValidationResult, as: Result
+  alias Workshop.Validator.Result
 
   test "validation results should start out with blank values" do
     assert %Result{}.runs == 0
