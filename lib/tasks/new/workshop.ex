@@ -124,18 +124,10 @@ defmodule Mix.Tasks.New.Workshop do
 
   embed_template :prerequisite, """
   defmodule Workshop.Prerequisite do
-    @type result :: :ok | {:error, String.t} | {:warning, String.t}
-    @type test_function :: (() -> result)
+    use Workshop.SolutionCheck
 
-    @spec run :: [test_function]
-    def run do
-      # register all the checks in this list
-      [&should_check_the_truth/0]
-    end
-
-    @spec should_check_the_truth :: result
-    defp should_check_the_truth do
-      # just remove and replace this example check
+    # just remove and replace this example check
+    verify "Should check the truth" do
       case 1 + 1 do
         2 ->
           :ok
