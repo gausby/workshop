@@ -5,16 +5,28 @@ defmodule Mix.Tasks.Workshop.Doctor do
   @spec run(OptionParser.argv) :: :ok
   def run(argv) do
     Workshop.start([], [])
-    {_, _, _} = OptionParser.parse(argv, switches: [system: :boolean])
+    {opts, _, _} = OptionParser.parse(argv, switches: [system: :boolean])
 
     Workshop.Doctor.run
-    |> handle_result
+    |> handle_result(opts)
   end
 
-  defp handle_result(%Result{runs: x, passed: x}) do
+  defp handle_result(%Result{runs: x, passed: x, warnings: []}, _opts) do
     Mix.shell.info "The system should be ready for this workshop"
   end
-  defp handle_result(%Result{errors: errors}) do
+  defp handle_result(%Result{runs: x, passed: x, warnings: warnings}, opts) do
+    message = if opts[:verbose] do
+      """
+      The system should be ready for this workshop but had the following warnings:
+
+      #{warnings |> Enum.map(&("  * #{&1}")) |> Enum.join("\n")}
+      """
+    else
+      "The system should be ready for this workshop"
+    end
+    Mix.shell.info message
+  end
+  defp handle_result(%Result{errors: errors}, _opts) do
     Mix.shell.error """
     The system does not fit the requirements for this workshop.
 
