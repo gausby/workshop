@@ -27,6 +27,14 @@ defmodule Mix.Tasks.Workshop.Next do
             Mix.shell.info """
             Go ahead and work in #{exercise}
             """
+
+          {:exists, folder} ->
+            Mix.shell.info """
+            Please complete the exercise in #{Path.relative_to(folder, sandbox)}
+
+            Type `mix workshop.check` when you are done to verify your solution.
+            """
+
           {:error, reason} ->
             Mix.shell.error """
             Setting up the next exercise failed with the following message:

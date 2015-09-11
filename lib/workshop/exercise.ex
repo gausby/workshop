@@ -113,21 +113,25 @@ defmodule Workshop.Exercise do
       exercise_sandbox_name(exercise_folder)
       |> Path.expand(Workshop.Session.get(:folder))
 
-    case create_directory(destination) do
-      :ok ->
-        source = files_folder(exercise_folder)
-        do_copy_files_to_sandbox(source, destination)
+    unless File.exists? destination do
+      case create_directory(destination) do
+        :ok ->
+          source = files_folder(exercise_folder)
+          do_copy_files_to_sandbox(source, destination)
 
-        exercises_state = Workshop.State.get(:exercises, [])
-        identifier = load(exercise_folder) |> get_identifier
-        current_exercise_state = exercises_state[identifier] || []
-        new_state = Keyword.put(current_exercise_state, :status, :in_progress)
+          exercises_state = Workshop.State.get(:exercises, [])
+          identifier = load(exercise_folder) |> get_identifier
+          current_exercise_state = exercises_state[identifier] || []
+          new_state = Keyword.put(current_exercise_state, :status, :in_progress)
 
-        Workshop.State.update(:exercises, Keyword.put(exercises_state, identifier, new_state))
-        Workshop.State.persist!
-        :ok
-      _ ->
-        {:error, "Could not create destination folder"}
+          Workshop.State.update(:exercises, Keyword.put(exercises_state, identifier, new_state))
+          Workshop.State.persist!
+          :ok
+        _ ->
+          {:error, "Could not create destination folder"}
+      end
+    else
+      {:exists, destination}
     end
   end
 
