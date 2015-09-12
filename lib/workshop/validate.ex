@@ -13,10 +13,13 @@ defmodule Workshop.Validate do
     end
   end
 
-  verify "Should have a version" do
+  verify "Workshop version attribute" do
+    version = Workshop.Info.get(Workshop.Meta, :version)
     cond do
       Workshop.Info.get(Workshop.Meta, :version) == nil ->
         {:error, "The workshop should have a version"}
+      Version.parse(version) == :error ->
+        {:error, "The workshop version should be a valid semver"}
       :otherwise ->
         :ok
     end
