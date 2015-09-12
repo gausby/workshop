@@ -115,9 +115,7 @@ defmodule Mix.Tasks.New.Exercise do
     \"""
 
     @hint [
-      \"""
-      @todo, write a couple of hints for the solving this exercise
-      \"""
+      "@todo, write a couple of hints for the solving this exercise"
     ]
   end
   """
@@ -131,9 +129,13 @@ defmodule Mix.Tasks.New.Exercise do
         |> Workshop.Exercise.exercise_sandbox_name
         |> Path.expand(Workshop.Session.get(:folder))
 
-      # locate and load the users solution
-      script = "exercise.exs" |> Path.expand(solution_dir)
-      Code.require_file(script)
+      # Locate and load and perhaps start the users solution.
+
+      # The following example assumes that the user solution is located
+      # in a file called *exercise.exs*:
+
+      # script = "exercise.exs" |> Path.expand(solution_dir)
+      # Code.require_file(script)
 
       # load and run the solution checker
       Code.require_file("check.exs", __DIR__)
@@ -148,7 +150,7 @@ defmodule Mix.Tasks.New.Exercise do
     use Workshop.Validator
 
     verify "verify something" do
-      # return value can be :ok, {:warning, message}, or {:error, message}
+      # return value can be `:ok`, `{:warning, message}`, or `{:error, message}`
       :ok
     end
 
