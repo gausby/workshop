@@ -48,6 +48,7 @@ defmodule Mix.Tasks.New.Workshop do
     assigns = [name: name, title: title, module: mod]
 
     create_file "README.md", readme_template(assigns)
+    create_file ".gitignore", gitignore_template(assigns)
     create_directory ".workshop"
     create_file ".workshop/prerequisite.exs", prerequisite_template(assigns)
     create_file ".workshop/workshop.exs", workshop_template(assigns)
@@ -71,6 +72,10 @@ defmodule Mix.Tasks.New.Workshop do
   ------------
   Type `mix workshop.start` in the terminal to start the workshop, and
   have fun!
+  """
+
+  embed_template :gitignore, """
+  .workshop/state.exs
   """
 
   embed_template :workshop, """
