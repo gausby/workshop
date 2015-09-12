@@ -1,6 +1,10 @@
 defmodule Workshop.Exercise do
   import Mix.Generator
 
+  alias Workshop.Session
+  alias Workshop.State
+  alias Workshop.Validator.Result
+
   @doc false
   defmacro __using__(_opts) do
     quote do
@@ -119,13 +123,13 @@ defmodule Workshop.Exercise do
           source = files_folder(exercise_folder)
           do_copy_files_to_sandbox(source, destination)
 
-          exercises_state = Workshop.State.get(:exercises, [])
+          exercises_state = State.get(:exercises, [])
           identifier = load(exercise_folder) |> get_identifier
           current_exercise_state = exercises_state[identifier] || []
           new_state = Keyword.put(current_exercise_state, :status, :in_progress)
 
-          Workshop.State.update(:exercises, Keyword.put(exercises_state, identifier, new_state))
-          Workshop.State.persist!
+          State.update(:exercises, Keyword.put(exercises_state, identifier, new_state))
+          State.persist!
           :ok
         _ ->
           {:error, "Could not create destination folder"}
@@ -166,7 +170,7 @@ defmodule Workshop.Exercise do
   """
   @spec increment_hint_counter(Atom) :: nil
   def increment_hint_counter(exercise_module) do
-    exercises_state = Workshop.State.get(:exercises, [])
+    exercises_state = State.get(:exercises, [])
     hints = get(exercise_module, :hint)
 
     identifier = get_identifier(exercise_module)
@@ -178,8 +182,8 @@ defmodule Workshop.Exercise do
 
     if current_exercise_state[:hint] < length hints do
       new_state = Keyword.update!(current_exercise_state, :hint, &(&1 + 1))
-      Workshop.State.update(:exercises, Keyword.put(exercises_state, identifier, new_state))
-      Workshop.State.persist!
+      State.update(:exercises, Keyword.put(exercises_state, identifier, new_state))
+      State.persist!
     end
   end
 
@@ -192,26 +196,57 @@ defmodule Workshop.Exercise do
     {weight, exercise_name}
   end
 
+  @doc """
+  Look in the exercise state if the exercise has been marked as completed;
+  if the exercise has no status at all the solution check will get run and
+  the state will get updated.
+  """
   @spec passes?(String.t) :: boolean
   def passes?(exercise) do
-    exercise_state = Workshop.State.get(:exercises, [])
     identifier = load(exercise) |> get_identifier
-
-    if Keyword.has_key?(exercise_state, identifier) do
-      Keyword.get(exercise_state[identifier], :status, nil) == :completed
-    else
-      false
+    unless Keyword.has_key?(exercises_state, identifier) do
+      set_status(exercise, check_solution(exercise) |> map_result)
     end
+
+    Keyword.get(exercises_state[identifier], :status, nil) == :completed
   end
 
+  defp exercises_state,
+    do: State.get(:exercises, [])
+
+  defp map_result(%Result{runs: x, passed: x}),
+    do: :completed
+  defp map_result(_),
+    do: :in_progress
+
+  @doc """
+  Check the user solution against the solution verification script
+  """
+  @spec check_solution(String.t) :: Result.t
+  def check_solution(exercise) do
+    exercise_folder = Path.expand(exercise, Session.get(:exercises_folder))
+    check_solution(exercise, exercise_folder)
+  end
+
+  @doc false
+  @spec check_solution(String.t, String.t) :: Result.t
+  def check_solution(exercise, exercise_folder) do
+    test_helper = "test/test_helper.exs" |> Path.expand(exercise_folder)
+    [{module, _}| _] = Code.require_file(test_helper)
+    module.exec(exercise)
+  end
+
+  @doc """
+  Update the state of the given exercise with the given state.
+  """
   @spec set_status(String.t, Atom) :: :ok
   def set_status(exercise, new_status) do
     identifier = load(exercise) |> get_identifier
-    exercises_state = Workshop.State.get(:exercises, [])
+    exercises_state = State.get(:exercises, [])
     current_exercise_state = exercises_state[identifier] || []
     new_state = Keyword.put(current_exercise_state, :status, new_status)
 
-    Workshop.State.update(:exercises, Keyword.put(exercises_state, identifier, new_state))
-    Workshop.State.persist!
+    State.update(:exercises, Keyword.put(exercises_state, identifier, new_state))
+    State.persist!
   end
 end

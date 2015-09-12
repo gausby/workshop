@@ -75,10 +75,6 @@ defmodule Mix.Tasks.Workshop.Next do
         This will display the validation results.
         """}
       :otherwise ->
-        # should perhaps fast forward through the already solved exercises
-        # by running the solution check on exercise solutions if they exist;
-        # it should then move the exercise state cursor to the first exercise
-        # folder that fail the solution check or has not been created yet
         :ok
     end
   end
