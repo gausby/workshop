@@ -11,7 +11,7 @@ defmodule Workshop.Info do
   def get(module, subject) when is_atom(module) and is_atom(subject) do
     case List.keyfind module.__info__(:attributes), subject, 0 do
       {:shortdesc, [false]} ->
-        nil
+        false
       {^subject, [content|_]} ->
         content
       _ ->
