@@ -106,7 +106,9 @@ defmodule Workshop.Validate do
 
   verify "Should have all valid exercises" do
     Exercises.list!
-    |> Enum.map(&Exercise.load/1)
+    |> Enum.map(fn exercise ->
+         %{exercise: exercise, mod: Exercise.load(exercise)}
+       end)
     |> Enum.map(&Exercise.validate/1)
   end
 end
