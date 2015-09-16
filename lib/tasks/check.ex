@@ -12,8 +12,12 @@ defmodule Mix.Tasks.Workshop.Check do
 
     current_exercise = Session.get(:current_exercise)
     if current_exercise do
+      exercise_folder = Path.expand(current_exercise, Session.get(:exercises_folder))
+
       current_exercise
-      |> Exercise.check_solution
+      |> Workshop.Exercise.exercise_sandbox_name
+      |> Path.expand(Workshop.Session.get(:folder))
+      |> Exercise.check_solution(exercise_folder)
       |> handle_result
     else
       Mix.shell.info "This command should get executed from within an exercise folder"

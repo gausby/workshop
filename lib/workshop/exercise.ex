@@ -69,7 +69,7 @@ defmodule Workshop.Exercise do
   end
 
   @doc """
-  Get the location of the exercise files folder or a given exercise.
+  Get the location of the exercise files folder for a given exercise.
 
   These are the files that a copied into the exercise sandbox when the user
   progress to the given exercise.
@@ -84,6 +84,21 @@ defmodule Workshop.Exercise do
     folder
     |> Path.join(exercise_folder)
     |> Path.join("files")
+  end
+
+  @doc """
+  Get the location of the solution folder for a given exercise.
+  """
+  @spec solution_folder(String.t) :: String.t
+  def solution_folder(exercise_folder) do
+    solution_folder(exercise_folder, Workshop.Session.get(:exercises_folder))
+  end
+
+  @spec solution_folder(String.t, String.t) :: String.t
+  def solution_folder(exercise_folder, folder) do
+    folder
+    |> Path.join(exercise_folder)
+    |> Path.join("solution")
   end
 
   @doc """
@@ -205,7 +220,9 @@ defmodule Workshop.Exercise do
   def passes?(exercise) do
     identifier = load(exercise) |> get_identifier
     unless Keyword.has_key?(exercises_state, identifier) do
-      set_status(exercise, check_solution(exercise) |> map_result)
+      sandbox_name = exercise_sandbox_name(exercise)
+      exercise_folder = Path.expand(exercise, Workshop.Session.get(:exercises_folder))
+      set_status(exercise, check_solution(sandbox_name, exercise_folder) |> map_result)
     end
 
     Keyword.get(exercises_state[identifier], :status, nil) == :completed
@@ -222,18 +239,11 @@ defmodule Workshop.Exercise do
   @doc """
   Check the user solution against the solution verification script
   """
-  @spec check_solution(String.t) :: Result.t
-  def check_solution(exercise) do
-    exercise_folder = Path.expand(exercise, Session.get(:exercises_folder))
-    check_solution(exercise, exercise_folder)
-  end
-
-  @doc false
   @spec check_solution(String.t, String.t) :: Result.t
-  def check_solution(exercise, exercise_folder) do
+  def check_solution(solution, exercise_folder) do
     test_helper = "test/test_helper.exs" |> Path.expand(exercise_folder)
     [{module, _}| _] = Code.require_file(test_helper)
-    module.exec(exercise)
+    module.exec(solution)
   end
 
   @doc """

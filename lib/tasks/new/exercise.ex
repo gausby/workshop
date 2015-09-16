@@ -122,20 +122,15 @@ defmodule Mix.Tasks.New.Exercise do
 
   embed_template :test_helper, """
   defmodule Workshop.Exercise.<%= @module %>Check.Helper do
-    def exec(solution) do
-      # this file should know how to load the given exercise solution
-      solution_dir =
-        solution
-        |> Workshop.Exercise.exercise_sandbox_name
-        |> Path.expand(Workshop.Session.get(:folder))
-
+    def exec(solution_dir) do
       # Locate and load and perhaps start the users solution.
 
       # The following example assumes that the user solution is located
       # in a file called *exercise.exs*:
 
-      # script = "exercise.exs" |> Path.expand(solution_dir)
-      # Code.require_file(script)
+      # "exercise.exs"
+      # |> Path.expand(solution_dir)
+      # |> Code.require_file
 
       # load and run the solution checker
       Code.require_file("check.exs", __DIR__)
