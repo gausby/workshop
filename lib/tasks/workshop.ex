@@ -11,9 +11,11 @@ defmodule Mix.Tasks.Workshop do
     Workshop.start([], [])
     {opts, _, _} = OptionParser.parse(argv, switches: [enabled: :boolean])
 
+    short_description = Info.get(Workshop.Meta, :shortdesc) || nil
+
     Docs.print_heading Info.get(Workshop.Meta, :title), opts
     Docs.print """
-    #{Info.get(Workshop.Meta, :shortdesc)}
+    #{short_description}
 
     #{list_exercises}
 
