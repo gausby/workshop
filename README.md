@@ -111,6 +111,8 @@ The *test_helper.exs*-file should know how to bootstrap the solution, and the *c
 #### solution/
 The solution folder should contain an implementation that solves the exercise. This will be run when the exercise is verified, so it should pass. This will also be used so that the user can compare solutions when their exercise has been handed in.
 
+The `mix workshop.check` command accept a `--solution` flag to aid in the development of an exercise solution. Given the `--solution` flag the check command will use the implementation found in the solution folder.
+
 ### `mix workshop.validate`
 Will check if the workshop is valid. This can aid in the development of workshops.
 
