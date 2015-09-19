@@ -92,6 +92,7 @@ defmodule Workshop do
     end
   end
 
+  @external_resource Path.join(__DIR__, "VERSION")
   def version do
     "VERSION"
     |> Path.expand(__DIR__)
