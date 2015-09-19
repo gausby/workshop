@@ -3,7 +3,7 @@ defmodule Workshop.Doctor do
 
   verify "System should have the same major minor version as the creation script" do
     requirement = Workshop.Info.get(Workshop.Meta, :generator_version)
-    version = Workshop.Mixfile.project[:version]
+    version = Workshop.version
 
     cond do
       Version.match?(version, "~> #{requirement}") ->

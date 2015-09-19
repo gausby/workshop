@@ -1,7 +1,7 @@
 defmodule Workshop.Mixfile do
   use Mix.Project
 
-  @version File.read!("VERSION") |> String.strip
+  @version File.read!("lib/VERSION") |> String.strip
   defp description do
     """
     Mix tasks for creating and running interactive workshops for teaching

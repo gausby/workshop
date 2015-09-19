@@ -91,4 +91,11 @@ defmodule Workshop do
       subject
     end
   end
+
+  def version do
+    "VERSION"
+    |> Path.expand(__DIR__)
+    |> File.read!
+    |> String.strip
+  end
 end
