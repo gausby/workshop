@@ -88,6 +88,7 @@ defmodule Mix.Tasks.New.Workshop do
     # The version number is used to verify what version of the workshop the user
     # is running.
     @version "0.0.1"
+    @generator_version "#{Workshop.Mixfile.project[:version]}"
 
     # An optional url to the website of the workshop. If the website is a Git repo
     # on GitHub the help page will point to the GitHub issues page when the user

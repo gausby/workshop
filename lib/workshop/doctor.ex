@@ -2,8 +2,21 @@ defmodule Workshop.Doctor do
   use Workshop.Validator
 
   verify "System should have the same major minor version as the creation script" do
-    # todo, the workshop should save the workshop version number it was created with
-    :ok
+    requirement = Workshop.Info.get(Workshop.Meta, :generator_version)
+    version = Workshop.Mixfile.project[:version]
+
+    cond do
+      Version.match?(version, "~> #{requirement}") ->
+        :ok
+
+      Version.match?(version, ">= #{requirement}") ->
+       {:error, "please downgrade your workshop version, this workshop is build with v#{requirement} "
+              <> "you are running v#{version}"}
+
+      :otherwise ->
+        {:error, "please upgrade your workshop, this workshop is build with v#{requirement} "
+              <> "you are running v#{version}"}
+    end
   end
 
   # This will fetch the result of the prerequisite tests defined for the workshop in *prerequisite.exs*
