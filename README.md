@@ -15,6 +15,11 @@ If the workshop has not been started yet (no state file has been created), the s
 ### `mix workshop.info`
 Display info about the current exercise if the command is executed from within an exercise. Alternatively it will display information about the workshop itself if not executed from an exercise folder.
 
+This should prepare the student for solving the exercise task, which can be seen by executing `mix workshop.task`.
+
+### `mix workshop.task`
+Display the task text for the given exercise.
+
 ### `mix workshop.hint`
 Display a hint about the current exercise. Like info, but with a bit more help for finishing the exercise.
 
@@ -96,7 +101,7 @@ $ mix new.exercise my_first_exercise
 These files will get created in *my_workshop/.workshop/exercises/my_first_exercise*.
 
 #### exercise.exs
-Contain meta data about a given workshop, such as its title, a description (and assignment), and a list of hints that will help the user complete the assignment.
+Contain meta data about a given workshop, such as its title, a description, a task, and a list of hints that will help the user complete the task.
 
 This file also contain a *weight*-value that determine the order the exercises are presented—an exercise with a low value will come before an exercise with a high value.
 

@@ -8,7 +8,7 @@ defmodule Workshop.Exercise do
   @doc false
   defmacro __using__(_opts) do
     quote do
-      Enum.each [:title, :weight, :description, :hint],
+      Enum.each [:title, :weight, :description, :task, :hint],
         &Module.register_attribute(__MODULE__, &1, persist: true)
     end
   end

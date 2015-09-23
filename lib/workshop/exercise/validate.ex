@@ -23,6 +23,16 @@ defmodule Workshop.Exercise.Validate do
     end
   end
 
+  verify "The existence of an exercise task", %{mod: exercise} do
+    task = Workshop.Exercise.get(exercise, :task)
+    cond do
+      task == nil ->
+        {:error, "The exercise #{inspect exercise} should have a task"}
+      :otherwise ->
+        :ok
+    end
+  end
+
   verify "should have a hint", %{mod: exercise} do
     hint = Workshop.Exercise.get(exercise, :hint)
     cond do
