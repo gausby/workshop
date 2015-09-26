@@ -68,6 +68,21 @@ defmodule Mix.Tasks.New.Workshop do
   <%= String.replace(@title, ~r/./, "=") %>
   **TODO: add a short description of the workshop**
 
+  Workshop
+  --------
+  To run this workshop you will need the workshop mix tasks to be
+  installed.
+
+  ```shell
+  git clone https://github.com/gausby/workshop.git
+  cd workshop
+  mix archive.build
+  mix archive.install
+  ```
+
+  The workshop tasks should now be available and you are ready to
+  run the workshop.
+
   What's next?
   ------------
   Type `mix workshop.start` in the terminal to start the workshop, and
