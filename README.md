@@ -105,6 +105,13 @@ Contain meta data about a given workshop, such as its title, a description, a ta
 
 This file also contain a *weight*-value that determine the order the exercises are presented—an exercise with a low value will come before an exercise with a high value.
 
+##### Callbacks
+So far the system defines one exercise callback function:
+
+  * `on_exercise_completed/0` - run every time the student complete the given exercise.
+
+All callback functions are optional and will do a noop if undefined.
+
 #### files/
 This folder contains files that will get copied into the workshop sandbox folder (the root of the workshop) when the exercise gets activated. The user will work with these files to solve the assignment.
 
