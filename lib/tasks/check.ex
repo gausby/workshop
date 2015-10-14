@@ -31,7 +31,15 @@ defmodule Mix.Tasks.Workshop.Check do
 
   # when checking user solution
   defp handle_result(%Result{errors: [], warnings: []}) do
-    Session.get(:current_exercise) |> Exercise.set_status(:completed)
+    exercise = Session.get(:current_exercise)
+
+    unless Exercise.get_status(exercise) == :completed do
+      # run `exercise completed` callback when transitioning into completed state
+      exercise_module = Exercise.load(exercise)
+      Exercise.run_callback(exercise_module, :on_exercise_completed)
+    end
+
+    Exercise.set_status(exercise, :completed)
 
     Mix.shell.info """
     All good! Type `mix workshop.next` to progress to next exercise

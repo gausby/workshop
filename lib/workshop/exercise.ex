@@ -247,7 +247,18 @@ defmodule Workshop.Exercise do
   end
 
   @doc """
-  Update the state of the given exercise with the given state.
+  Get the status of the given exercise
+  """
+  @spec get_status(String.t) :: :in_progress | :completed | nil
+  def get_status(exercise) do
+    identifier = load(exercise) |> get_identifier
+    exercises_state = State.get(:exercises, [])
+    current_exercise_state = exercises_state[identifier] || []
+    current_exercise_state[:status]
+  end
+
+  @doc """
+  Update the status of the given exercise with new status.
   """
   @spec set_status(String.t, Atom) :: :ok
   def set_status(exercise, new_status) do
@@ -258,5 +269,21 @@ defmodule Workshop.Exercise do
 
     State.update(:exercises, Keyword.put(exercises_state, identifier, new_state))
     State.persist!
+  end
+
+  @doc """
+  Helper for running callbacks at certain points in the exercise work flow.
+
+  The function expect a exercise module, the function which should get called, defined
+  as a public function on the exercise module, and the arguments that the function
+  should get called with.
+
+  It will figure the arity of the callback function from the size of the args list.
+  """
+  @spec run_callback(Atom, Atom, [Any]) :: Any
+  def run_callback(exercise_module, callback, args \\ []) do
+    if Code.ensure_loaded?(exercise_module) and function_exported?(exercise_module, callback, length args) do
+      apply(exercise_module, callback, args)
+    end
   end
 end
