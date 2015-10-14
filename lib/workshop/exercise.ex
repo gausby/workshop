@@ -247,7 +247,18 @@ defmodule Workshop.Exercise do
   end
 
   @doc """
-  Update the state of the given exercise with the given state.
+  Get the status of the given exercise
+  """
+  @spec get_status(String.t) :: :in_progress | :completed | nil
+  def get_status(exercise) do
+    identifier = load(exercise) |> get_identifier
+    exercises_state = State.get(:exercises, [])
+    current_exercise_state = exercises_state[identifier] || []
+    current_exercise_state[:status]
+  end
+
+  @doc """
+  Update the status of the given exercise with new status.
   """
   @spec set_status(String.t, Atom) :: :ok
   def set_status(exercise, new_status) do

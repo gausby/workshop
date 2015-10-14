@@ -32,11 +32,10 @@ defmodule Mix.Tasks.Workshop.Check do
   # when checking user solution
   defp handle_result(%Result{errors: [], warnings: []}) do
     exercise = Session.get(:current_exercise)
-    exercise_module = Exercise.load(exercise)
-    identifier = Exercise.get_identifier(exercise_module)
 
-    unless Workshop.State.get(:exercises)[identifier][:status] == :completed do
-      # run exercise completed callback when transitioning into completed state
+    unless Exercise.get_status(exercise) == :completed do
+      # run `exercise completed` callback when transitioning into completed state
+      exercise_module = Exercise.load(exercise)
       Exercise.run_callback(exercise_module, :on_exercise_completed)
     end
 
