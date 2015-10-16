@@ -34,7 +34,7 @@ defmodule Workshop.Mixfile do
         "GitHub" => "https://github.com/gausby/workshop",
         "Bugs" => "https://github.com/gausby/workshop/issues"
       },
-      files: ~w(lib config mix.exs LICENSE VERSION README*)
+      files: ~w(lib config mix.exs LICENSE README*)
     }
   end
 
