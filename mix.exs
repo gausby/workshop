@@ -27,7 +27,7 @@ defmodule Workshop.Mixfile do
   defp package do
     %{
       licenses: ["Apache v2.0"],
-      contributors: [
+      maintainers: [
         "Martin Gausby"
       ],
       links: %{
