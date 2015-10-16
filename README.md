@@ -75,6 +75,10 @@ This define various information about the workshop, such as its human readable t
 
 All of this is implemented as module attributes.
 
+Optionally public functions that will get called on given hooks in the workshop life cycle can be defined. So far they are:
+
+  * `on_workshop_completed/0` - Called when all exercises in the workshop has been completed.
+
 #### *.workshop/prerequisite.exs*
 The prerequisite file can be used to define tests and checks that will get run during the system check process, run before the workshop starts, or whenever the `mix workshop.doctor` task is run.
 

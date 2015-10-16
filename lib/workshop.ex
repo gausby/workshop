@@ -99,4 +99,19 @@ defmodule Workshop do
     |> File.read!
     |> String.strip
   end
+
+  @doc """
+  Helper for running callbacks at certain points in the workflow.
+
+  The function expect the name of a callback (optionally) defined as a public function
+  on the workshop info module.
+
+  It will figure the arity of the callback function from the size of the args list.
+  """
+  @spec run_callback(Atom, [Any]) :: Any
+  def run_callback(callback, args \\ []) do
+    if Code.ensure_loaded?(Workshop.Meta) and function_exported?(Workshop.Meta, callback, length args) do
+      apply(Workshop.Meta, callback, args)
+    end
+  end
 end

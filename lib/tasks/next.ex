@@ -19,6 +19,7 @@ defmodule Mix.Tasks.Workshop.Next do
     sandbox = Workshop.Session.get(:folder)
     case Progress.find_next(source, sandbox) do
       :workshop_over ->
+        Workshop.run_callback(:on_workshop_completed)
         Mix.shell.info Info.get(Workshop.Meta, :debriefing)
 
       {:next, exercise} ->
