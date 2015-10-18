@@ -37,7 +37,7 @@ defmodule Mix.Tasks.Workshop.Help do
 
     The exercise description of the current exercise can be displayed using
     the `mix workshop.info` command, and the solution can be verified with
-    the `mix workshop.verify` command.
+    the `mix workshop.check` command.
 
     If a solution is valid the `mix workshop.next` command can be used to
     checkout and progress to the next exercise.
