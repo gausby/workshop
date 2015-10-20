@@ -85,7 +85,7 @@ defmodule Mix.Tasks.New.Workshop do
 
   What's next?
   ------------
-  Type `mix workshop.start` in the terminal to start the workshop, and
+  Type `mix workshop.next` in the terminal to start the workshop, and
   have fun!
   """
 
