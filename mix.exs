@@ -1,7 +1,6 @@
 defmodule Workshop.Mixfile do
   use Mix.Project
 
-  @version File.read!("lib/VERSION") |> String.strip
   defp description do
     """
     Mix tasks for creating and running interactive workshops for teaching
@@ -11,7 +10,7 @@ defmodule Workshop.Mixfile do
 
   def project do
     [app: :workshop,
-     version: @version,
+     version: "0.5.1",
      description: description,
      package: package,
      elixir: "~> 1.0",

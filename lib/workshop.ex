@@ -19,6 +19,13 @@ defmodule Workshop do
     Workshop.Session.get(:data_folder) |> Path.join("workshop.exs") |> Code.require_file
   end
 
+  @doc """
+  Print the workshop version. This is exposed this way because the data would not be
+  available otherwise when the system has been made into a mix archive.
+  """
+  @spec version :: String.t
+  def version, do: "0.5.1"
+
   defdelegate validate, to: Workshop.Validate, as: :run
 
   defdelegate doctor, to: Workshop.Doctor, as: :run
@@ -90,14 +97,6 @@ defmodule Workshop do
     else
       subject
     end
-  end
-
-  @external_resource Path.join(__DIR__, "VERSION")
-  def version do
-    "VERSION"
-    |> Path.expand(__DIR__)
-    |> File.read!
-    |> String.strip
   end
 
   @doc """
