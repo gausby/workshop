@@ -1,7 +1,6 @@
 defmodule Mix.Tasks.New.Workshop do
   use Mix.Task
   import Mix.Generator
-  import Mix.Utils, only: [camelize: 1]
 
   @shortdoc "Create a new workshop"
   @moduledoc """
