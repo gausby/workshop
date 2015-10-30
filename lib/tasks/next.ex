@@ -26,7 +26,11 @@ defmodule Mix.Tasks.Workshop.Next do
         case Workshop.Exercise.copy_files_to_sandbox(exercise) do
           :ok ->
             Mix.shell.info """
-            Go ahead and work in #{exercise}
+            Go ahead and work in #{exercise}.
+
+            Type `mix workshop.info` and `mix workshop.task` from the new
+            folder to get the description and task of your next exercise.
+            Have fun!
             """
 
           {:exists, folder} ->
