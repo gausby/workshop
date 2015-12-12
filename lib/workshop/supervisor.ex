@@ -6,18 +6,17 @@ defmodule Workshop.Supervisor do
   end
 
   def init(_opts) do
-    case Workshop.locate_root do
-      {:ok, root} ->
-        workshop_folder = root
-      {:ok, root, exercise} ->
-        workshop_folder = root
-        exercise = exercise
-    end
-
     children = [
-      worker(Workshop.Session, [workshop_folder, exercise, [name: Workshop.Session]]),
+      session_worker(Workshop.locate_root),
       worker(Workshop.State, [[name: Workshop.State]])
     ]
     supervise(children, strategy: :one_for_one)
   end
+
+  defp session_worker({:ok, workshop_folder, exercise}),
+    do: worker(Workshop.Session, [workshop_folder, exercise, [name: Workshop.Session]])
+  defp session_worker({:ok, workshop_folder}),
+    do: worker(Workshop.Session, [workshop_folder, nil, [name: Workshop.Session]])
+  defp session_worker({:error, reason}),
+    do: raise(reason)
 end

@@ -1,7 +1,6 @@
 defmodule Workshop.Exercise do
   import Mix.Generator
 
-  alias Workshop.Session
   alias Workshop.State
   alias Workshop.Validator.Result
 
