@@ -188,11 +188,13 @@ defmodule Workshop.Exercise do
     hints = get(exercise_module, :hint)
 
     identifier = get_identifier(exercise_module)
-    current_exercise_state = exercises_state[identifier]
+    current_exercise_state =
+      if Keyword.has_key?(exercises_state[identifier], :hint) do
+        exercises_state[identifier]
+      else
+        Keyword.put(exercises_state[identifier], :hint, 0)
+      end
 
-    unless Keyword.has_key?(current_exercise_state, :hint) do
-      current_exercise_state = Keyword.put(current_exercise_state, :hint, 0)
-    end
 
     if current_exercise_state[:hint] < length hints do
       new_state = Keyword.update!(current_exercise_state, :hint, &(&1 + 1))
@@ -218,6 +220,7 @@ defmodule Workshop.Exercise do
   @spec passes?(String.t) :: boolean
   def passes?(exercise) do
     identifier = load(exercise) |> get_identifier
+    exercises_state = State.get(:exercises, [])
     unless Keyword.has_key?(exercises_state, identifier) do
       sandbox_name = exercise_sandbox_name(exercise)
       exercise_folder = Path.expand(exercise, Workshop.Session.get(:exercises_folder))
@@ -227,13 +230,9 @@ defmodule Workshop.Exercise do
     Keyword.get(exercises_state[identifier], :status, nil) == :completed
   end
 
-  defp exercises_state,
-    do: State.get(:exercises, [])
 
-  defp map_result(%Result{runs: x, passed: x}),
-    do: :completed
-  defp map_result(_),
-    do: :in_progress
+  defp map_result(%Result{runs: x, passed: x}), do: :completed
+  defp map_result(_), do: :in_progress
 
   @doc """
   Check the user solution against the solution verification script

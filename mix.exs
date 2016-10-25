@@ -39,5 +39,7 @@ defmodule Workshop.Mixfile do
 
   # This project should not have any third-party dependencies as it should
   # be able to build to, and be distributed as, a mix archive.
-  defp deps, do: []
+  defp deps, do: [
+    {:credo, "~> 0.4", only: [:dev, :test]}
+  ]
 end

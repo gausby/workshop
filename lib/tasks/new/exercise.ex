@@ -12,10 +12,10 @@ defmodule Mix.Tasks.New.Exercise do
 
   It expects a name for the new exercise
 
-      mix new.workshop NAME
+      mix new.exercise NAME
 
   The path will be named after the given NAME. Given `my_exercise` it will
-  result in a workshop named *My Exercise*.
+  result in a exercise named *My Exercise*.
 
   The exercises will be ordered by a weight set as a module attribute in the
   generated *name/exercise.exs* file. It will increment by 1000 for every new
